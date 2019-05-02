@@ -1,0 +1,33 @@
+<html lang="en">
+
+<head>
+    <title> The request data-</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+</head>
+
+<body>
+    <h2 id="title">
+        <center>XMLHttpRequest as you believe</center>
+    </h2>
+    <script>
+        // Get all users
+        var url = "http://localhost:8000/farmers/";
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', url, true)
+        xhr.onload = function () {
+            var users = JSON.parse(xhr.responseText);
+            if (xhr.readyState == 4 && xhr.status == "200") {
+                console.table(users);
+            } else {
+                console.error(users);
+            }
+        }
+        xhr.send(null);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JS client side</title>
+    <script type="text/javascript">
+
+            var HttpClient = function() {
+            this.get = function(aUrl, aCallback) {
+            var anHttpRequest = new XMLHttpRequest();
+            anHttpRequest.onreadystatechange = function() { 
+            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+            aCallback(anHttpRequest.responseText);
+            }
+            anHttpRequest.open( "GET", aUrl, true ); 
+            anHttpRequest.send( null ); 
+            }
+            }
+            var theurl='http://api.ipinfodb.com/v3/ip-city/?key=9d64fcfdfacc213c7ddf4ef911dfe97b55e4696be3532bf8302876c09sadaad06b&format=json&ip=40.77.167.44';
+            var client = new HttpClient();
+            client.get(theurl, function(response) { 
+            var response1 = JSON.parse(response);
+            // alert(response);
+            document.getElementById("statusCode").innerHTML = response1.name + ", " + response1.statusCode;
+            document.getElementById("statusCode").innerHTML = response1.statusCode;
+            document.getElementById("statusMessage").innerHTML = response1.statusMessage;
+            document.getElementById("ipAddress").innerHTML = response1.ipAddress;
+            document.getElementById("countryCode").innerHTML = response1.countryCode;
+            document.getElementById("countryName").innerHTML = response1.countryName;
+            document.getElementById("regionName").innerHTML = response1.regionName;
+            document.getElementById("cityName").innerHTML = response1.cityName;
+            document.getElementById("zipCode").innerHTML = response1.zipCode;
+            document.getElementById("latitude").innerHTML = response1.latitude;
+        }); 
+        </script>
+</head>
+<body>
+    <center> <p>JS test </p> 
+    <table border="1">
+        <tr><td>statusCode :</td><td id="statusCode"></td></tr>
+        <tr><td>statusMessage :</td><td id="statusMessage"></td></tr>
+        <tr><td>ipAddress :</td><td id="ipAddress"></td></tr>
+        <tr><td>countryCode :</td><td id="countryCode"></td></tr>
+        <tr><td>countryName :</td><td id="countryName"></td></tr>
+        <tr><td>regionName :</td><td id="regionName"></td></tr>
+        <tr><td>cityName :</td><td id="cityName"></td></tr>
+        <tr><td>zipCode :</td><td id="zipCode"></td></tr>
+        <tr><td>latitude :</td><td id="latitude"></td></tr>
+        <tr><td>longitude :</td><td id="longitude"></td></tr>
+        <tr><td>timeZone :</td><td id="timeZone"></td></tr> 
+    </table>
+</center>
+    
+</body>
+</html>
