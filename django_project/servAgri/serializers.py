@@ -23,7 +23,7 @@ class DonnecapSerializer(serializers.HyperlinkedModelSerializer):
 class PolygonSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Polygon
-        fields = ('url', 'name')
+        fields = ('url', 'id','name')
 
 
 class ROIPolygoneSerializer(serializers.HyperlinkedModelSerializer):
