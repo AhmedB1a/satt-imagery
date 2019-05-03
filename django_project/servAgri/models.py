@@ -67,11 +67,10 @@ class Donnecap(models.Model):
 
 
 class Polygon(models.Model):
-    id_polygon = models.AutoField(max_length=15, primary_key=True)
     name= models.CharField(max_length=13, null=True)
-
     def __str__(self):
-        return str(self.id_polygon)
+        return self.name
+
 
 
 class ROIPolygone(models.Model):

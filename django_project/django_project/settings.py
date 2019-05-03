@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_time',
+        'NAME': 'godjango',
         'USER': 'waleed',
         'PASSWORD': '',
         'HOST': 'localhost',
