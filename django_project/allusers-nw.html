@@ -9,8 +9,8 @@
 
 </head>
 <header>
-    <h3>Laoding data from the server</h3>
-    <button id="btn">Fetch the information</button>
+    <h3>Laoding data from the server: <button id="btn">Fetch the information</button></h3>
+    
 </header>
 
 <div id="animal-info" class="lob"></div>
@@ -113,7 +113,7 @@
         var htmlString = "";
         
         
-            htmlString += "<p>" + data.url + " is a " + data.firstName + " + " + data.lastName + ".</p>";
+            htmlString += "<p>"+"The URL: " + data.url + " and the full name of the farmer: " + data.firstName + " + " + data.lastName + ".</p>";
 
             console.log(htmlString);
             
