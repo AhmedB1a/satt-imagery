@@ -9,16 +9,34 @@
 
 </head>
 <header>
-    <h3>Laoding data from the server: <button id="btn">Fetch the information</button></h3>
-    
+    <h3>Laoding data from the server: <button id="btn">Hit here</button>
+        <h4>
+            <div id="animal-info" class="lob"></div>
+        </h4>
+    </h3>
+
+
 </header>
 
-<div id="animal-info" class="lob"></div>
+<header>
+    <h3> loading the data of captured data:
+        <button id="btn_cd">Hit here </button>
+        <h4>
+            <div id="aa"></div>
+        </h4>
+    </h3>
+
+</header>
+
+
+
+
 
 <style>
-    .lob{
+    .lob {
         background-color: #046380;
     }
+
     html,
     body {
         padding: 0;
@@ -81,6 +99,11 @@
     }
 </style>
 <script>
+    var pc = 1;
+    var cd_container = document.getElementById("aa");
+    var btn_cd = document.getElementById("btn_cd");
+
+
     var pageCounter = 1;
     var animalContainer = document.getElementById("animal-info");
     var btn = document.getElementById("btn");
@@ -109,16 +132,81 @@
         }
     });
 
+    btn_cd.addEventListener("click", function () {
+        var ourRequest = new XMLHttpRequest();
+        ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/' + pc + '.json', true);
+        ourRequest.onload = function () {
+            if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                var ourData = JSON.parse(ourRequest.responseText);
+                RH2(ourData);
+            } else {
+                console.log("We connected to the server, but it returned an error.");
+            }
+
+        };
+
+        ourRequest.onerror = function () {
+            console.log("Connection error");
+        };
+
+        ourRequest.send();
+
+        pc++;
+        if (pc > 2) {
+            btn_cd.classList.add("hide-me");
+        }
+    });
+/*     function RH2(data) {
+        var
+        cd_container.innerHtml = data.image;
+            } */
+            function RH2(data) {
+                var htmlString = "";
+                htmlString += "<img src=" + data.image + "/>";
+                cd_container.insertAdjacentHTML('beforeend', htmlString);
+            }
+
+
+/**     function RH2(data) {
+        var htmlString = "";
+        htmlString += " " + data.url + " ";
+
+        /*         var img = document.createElement("img");
+                img.setAttribute('src', 'data.image');
+                var boe =document.getElementById("aa").appendChild(img); */
+     /*   function si() {
+            var value = 'data.image';
+            var img = new Image(1, 1);
+            img = document.createElement('img');
+            img.src = document.getElementById('aa').src = "data:image/png;base64," + data.image;
+            /* document.body.appendChild(img); */
+     /*       document.body.appendChild(img);
+            return img;
+        }
+        function showImage() {
+            var img = document.createElement('img');
+            document.body.appendChild(img)
+            img.innerHTML = "<img src='data.image'></img>";
+        }
+
+
+        /** "<img src=data.image ></img>" **/
+     /*   htmlString += "<br>" + "The image is here: " + si();
+
+        cd_container.insertAdjacentHTML('beforeend', htmlString);
+    } */
+
+
     function renderHTML(data) {
         var htmlString = "";
-        
-        
-            htmlString += "<p>"+"The URL: " + data.url + " and the full name of the farmer: " + data.firstName + " + " + data.lastName + ".</p>";
 
-            console.log(htmlString);
-            
 
-     
+        htmlString += "<p>" + "The URL: " + data.url + " , and the full name of the farmer: " + data.firstName + "  " + data.lastName + ".</p>";
+
+        console.log(htmlString);
+
+
+
 
         animalContainer.insertAdjacentHTML('beforeend', htmlString);
     }
