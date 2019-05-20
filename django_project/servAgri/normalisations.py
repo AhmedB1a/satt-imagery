@@ -55,14 +55,15 @@ from .models import *
 class Calculation:
     def __init__(self, *args, **kwargs ):
         pass 
-
+    # this function get called by two functions: call_of_the_image_coor_length and call_of_the_image_coor_width
     def calc(self, one = [], two = []):
         f = []
         for i in range(len(one)):
             f.append(abs(one[i] - two[i]))
         return f
 
-    
+    #this two functions caculate the length and the width of the image, 
+    # but the result with decimal.Decimal format, so I need to convert them for calculas reason 
 
     def call_of_the_image_coor_length(self):
         self.psg_lat = []
@@ -146,6 +147,7 @@ class Calculation:
         self.h6 = abs(self.lon6 - self.psg_lon)
         return self.l1, self.h1, self.l2, self.h2, self.l3, self.h3, self.l4, self.h4,self.l5, self.h5, self.l6, self.h6
     
+    # this function contains all the lenght and width of the points of the polygon 
     def end_points(self): 
         self.l1, self.h1, self.l2, self.h2, self.l3, self.h3, self.l4, self.h4,self.l5, self.h5, self.l6, self.h6 = self.new_points()
         #self.l = self.call_of_the_image_coor_width()
@@ -162,13 +164,16 @@ class Calculation:
         self.p5 = ( self.l5/self.l , self.h5/self.h )
         self.p6 = ( self.l6/self.l , self.h6/self.h )
         return self.p1, self.p2, self.p3, self.p4 , self.p5, self.p6
-
+    # this will convert the width of the image from decimal.Decimal to an flaot type 
+    # for a calculation reason 
     def convert_h(self):
         self.h = self.call_of_the_image_coor_width()
         self.h = [ str(i) for i in self.h]
         self.res = float("".join(self.h))
         return self.res
 
+
+    #this will convert the lenght of the photo from decimal.Decimal to an float type 
     def convert_l(self):
         self.l = self.call_of_the_image_coor_length()
         self.l = [ str(i) for i in self.l]
