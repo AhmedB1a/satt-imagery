@@ -27,12 +27,20 @@
     </h3>
 
 </header>
-
+<header>
+    <p> the canvas</p>
+    <div id="show"></div>
+    <canvas id="myCanvas" width="1090" height="600"></canvas>
+</header>
 
 
 
 
 <style>
+    canvas {
+        border: 2px solid black;
+    }
+
     .lob {
         background-color: #046380;
     }
@@ -98,122 +106,183 @@
         margin: 0;
     }
 </style>
-<script>
-    var pc = 1;
-    var cd_container = document.getElementById("aa");
-    var btn_cd = document.getElementById("btn_cd");
 
-
-    var pageCounter = 1;
-    var animalContainer = document.getElementById("animal-info");
-    var btn = document.getElementById("btn");
-
-    btn.addEventListener("click", function () {
-        var ourRequest = new XMLHttpRequest();
-        ourRequest.open('GET', 'http://localhost:8000/farmers/' + pageCounter + '.json');
-        ourRequest.onload = function () {
-            if (ourRequest.status >= 200 && ourRequest.status < 400) {
-                var ourData = JSON.parse(ourRequest.responseText);
-                renderHTML(ourData);
-            } else {
-                console.log("We connected to the server, but it returned an error.");
-            }
-
-        };
-
-        ourRequest.onerror = function () {
-            console.log("Connection error");
-        };
-
-        ourRequest.send();
-        pageCounter++;
-        if (pageCounter > 2) {
-            btn.classList.add("hide-me");
-        }
-    });
-
-    btn_cd.addEventListener("click", function () {
-        var ourRequest = new XMLHttpRequest();
-        ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/' + pc + '.json', true);
-        ourRequest.onload = function () {
-            if (ourRequest.status >= 200 && ourRequest.status < 400) {
-                var ourData = JSON.parse(ourRequest.responseText);
-                RH2(ourData);
-            } else {
-                console.log("We connected to the server, but it returned an error.");
-            }
-
-        };
-
-        ourRequest.onerror = function () {
-            console.log("Connection error");
-        };
-
-        ourRequest.send();
-
-        pc++;
-        if (pc > 2) {
-            btn_cd.classList.add("hide-me");
-        }
-    });
-/*     function RH2(data) {
-        var
-        cd_container.innerHtml = data.image;
-            } */
-            function RH2(data) {
-                var htmlString = "";
-                htmlString += "<img src=" + data.image + "/>";
-                cd_container.insertAdjacentHTML('beforeend', htmlString);
-            }
-
-
-/**     function RH2(data) {
-        var htmlString = "";
-        htmlString += " " + data.url + " ";
-
-        /*         var img = document.createElement("img");
-                img.setAttribute('src', 'data.image');
-                var boe =document.getElementById("aa").appendChild(img); */
-     /*   function si() {
-            var value = 'data.image';
-            var img = new Image(1, 1);
-            img = document.createElement('img');
-            img.src = document.getElementById('aa').src = "data:image/png;base64," + data.image;
-            /* document.body.appendChild(img); */
-     /*       document.body.appendChild(img);
-            return img;
-        }
-        function showImage() {
-            var img = document.createElement('img');
-            document.body.appendChild(img)
-            img.innerHTML = "<img src='data.image'></img>";
-        }
-
-
-        /** "<img src=data.image ></img>" **/
-     /*   htmlString += "<br>" + "The image is here: " + si();
-
-        cd_container.insertAdjacentHTML('beforeend', htmlString);
-    } */
-
-
-    function renderHTML(data) {
-        var htmlString = "";
-
-
-        htmlString += "<p>" + "The URL: " + data.url + " , and the full name of the farmer: " + data.firstName + "  " + data.lastName + ".</p>";
-
-        console.log(htmlString);
-
-
-
-
-        animalContainer.insertAdjacentHTML('beforeend', htmlString);
-    }
-</script>
-<script>
-</script>
 
 <body>
+
+    <script>
+        var pc = 1;
+        var cd_container = document.getElementById("aa");
+        var btn_cd = document.getElementById("btn_cd");
+
+
+        var pageCounter = 1;
+        var animalContainer = document.getElementById("animal-info");
+        var btn = document.getElementById("btn");
+
+        btn.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.open('GET', 'http://localhost:8000/farmers/' + pageCounter + '.json');
+            ourRequest.onload = function () {
+                if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    renderHTML(ourData);
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                }
+
+            };
+
+            ourRequest.onerror = function () {
+                console.log("Connection error");
+            };
+
+            ourRequest.send();
+            pageCounter++;
+            if (pageCounter > 2) {
+                btn.classList.add("hide-me");
+            }
+        });
+
+        btn_cd.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/' + pc + '.json', true);
+            ourRequest.onload = function () {
+                if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    RH2(ourData);
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                }
+
+            };
+
+            ourRequest.onerror = function () {
+                console.log("Connection error");
+            };
+
+            ourRequest.send();
+
+            pc++;
+            if (pc > 2) {
+                btn_cd.classList.add("hide-me");
+            }
+        });
+        /*     function RH2(data) {
+                var
+                cd_container.innerHtml = data.image;
+                    } */
+        function RH2(data) {
+            var htmlString = "";
+            htmlString += "<img src=" + data.image + "/>";
+            cd_container.insertAdjacentHTML('beforeend', htmlString);
+        }
+
+
+        /**     function RH2(data) {
+                var htmlString = "";
+                htmlString += " " + data.url + " ";
+        
+                /*         var img = document.createElement("img");
+                        img.setAttribute('src', 'data.image');
+                        var boe =document.getElementById("aa").appendChild(img); */
+        /*   function si() {
+               var value = 'data.image';
+               var img = new Image(1, 1);
+               img = document.createElement('img');
+               img.src = document.getElementById('aa').src = "data:image/png;base64," + data.image;
+               /* document.body.appendChild(img); */
+        /*       document.body.appendChild(img);
+               return img;
+           }
+           function showImage() {
+               var img = document.createElement('img');
+               document.body.appendChild(img)
+               img.innerHTML = "<img src='data.image'></img>";
+           }
+   
+   
+           /** "<img src=data.image ></img>" **/
+        /*   htmlString += "<br>" + "The image is here: " + si();
+   
+           cd_container.insertAdjacentHTML('beforeend', htmlString);
+       } */
+
+
+        function renderHTML(data) {
+            var htmlString = "";
+
+
+            htmlString += "<p>" + "The URL: " + data.url + " , and the full name of the farmer: " + data.firstName + "  " + data.lastName + ".</p>";
+
+            console.log(htmlString);
+
+
+
+
+            animalContainer.insertAdjacentHTML('beforeend', htmlString);
+        }
+    </script>
+
+    <script>
+    var ourData = [];
+    htmlString = "";
+    var canvas = document.getElementById("myCanvas");
+    var c = canvas.getContext("2d");
+    var slideContainer = document.getElementById("show");
+    var image = new Image();
+    var ourRequest = new XMLHttpRequest();
+    ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/1.json', true);
+    ourRequest.onload = function () {
+        if (ourRequest.status >= 200 && ourRequest.status < 400) {
+            ourData.push(JSON.parse(ourRequest.responseText));
+            render1(ourData);
+        } else {
+            console.log("We connected to the server, but it returned an error.");
+        }
+    }
+    ourRequest.send();
+    function render1(data) {
+        console.log(data.image)
+        data.map(f => {
+            loadImg(f.image).then(successurl => {
+                let htmlString = '<img  src="' + successurl + '" />';
+                canvas.insertAdjacentHTML("beforeend", htmlString);
+                var img = new Image();
+                img.src = successurl;
+                console.log(img.src);
+                c.drawImage(img, 0, 0, canvas.width, canvas.height);
+                c.beginPath();
+                c.moveTo(0.8303233387005521 * 1090, 0.15273631840765725 * 600);
+                c.lineTo( 0.8681839940815538 * 1090, 0.4248756218907236 * 600);
+                c.lineTo( 0.8070412115409736 * 1090, 0.496641791044931 * 600);
+                c.lineTo(0.7366290961312514 * 1090, 0.5657960199001554 * 600);
+                c.lineTo( 0.6831454806562509 * 1090, 0.6242537313429378 * 600);
+                c.lineTo(0.632098872883938 * 1090, 0.304601990049576 * 600)
+                c.closePath();
+                c.lineWidth = 2;
+
+                c.stroke();
+                console.log(c);
+            }),
+                errorurl => {
+                    console.log("Error loading " + errorurl);
+                };
+        });
+    }
+    function loadImg(url) {
+        return new Promise((resolve, reject) => {
+            let img = new Image();
+            img.onload = () => {
+                resolve(url);
+            };
+            img.onerror = () => {
+                reject(url);
+            };
+            img.src = url;
+        });
+    }
+    </script>
+</body>
 
 </html>
