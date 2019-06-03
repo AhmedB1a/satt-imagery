@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <title>Grabing data</title>
+
+
+
+<style>
+    canvas {
+        border: 2px solid black;
+    }
+
+    .lob {
+        background-color: #046380;
+    }
+
+    html,
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    .hide-me {
+        visibility: hidden;
+        opacity: 0;
+        transform: scale(.75);
+    }
+
+    h1 {
+        margin-top: 0;
+        font-size: 2.4em;
+        font-weight: normal;
+        display: inline-block;
+    }
+
+    body {
+        font-family: Helvetica, sans-serif;
+        padding: 50px 10%;
+    }
+
+    button {
+        background-color: #046380;
+        color: #FFF;
+        border: none;
+        padding: 10px 15px;
+        font-size: 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        outline: none;
+        box-shadow: 2px 2px 0 #034154;
+        margin-bottom: 10px;
+        margin-left: 18px;
+        transition: opacity .4s ease-out, transform .4s ease-out, visibility .4s ease-out;
+        position: relative;
+        top: -10px;
+    }
+
+    button:hover {
+        background-color: #034F66;
+    }
+
+    button:active {
+        background-color: #034154;
+        box-shadow: none;
+        position: relative;
+        top: -8px;
+        left: 2px;
+    }
+
+    p {
+        padding: 4px 0 2px 8px;
+        line-height: 1.7;
+        border-bottom: 1px dotted #DDD;
+        list-style: none;
+        margin: 0;
+    }
+</style>
+
+</head>
+
+<body>
+        <header>
+                <h3>Laoding data from the server: <button id="btn">Hit here</button>
+                    <h4>
+                        <div id="animal-info" class="lob"></div>
+                    </h4>
+                </h3>
+            
+            
+            </header>
+            
+            <header>
+                <h3> loading the data of captured data:
+                    <button id="btn_cd">Hit here </button>
+                    <h4>
+                        <div id="aa"></div>
+                    </h4>
+                </h3>
+            
+            </header>
+            <header>
+                <p> the canvas</p>
+                <canvas id="myCanvas" width="1090" height="600"></canvas>
+            </header>
+
+
+    <div>
+        <label for="issueInput">Choose one of the Polygons --</label>
+        <select id="mypoligones" name="id" class="form-control" >
+            
+            
+        </select>
+    </div>
+
+    <script>
+        var pc = 1;
+        var cd_container = document.getElementById("aa");
+        var btn_cd = document.getElementById("btn_cd");
+
+        var pageCounter = 1;
+        var animalContainer = document.getElementById("animal-info");
+        var btn = document.getElementById("btn");
+        
+        btn.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.open('GET', 'http://localhost:8000/farmers/' + pageCounter + '.json');
+            ourRequest.onload = function () {
+                if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    renderHTML(ourData);
+                    
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                }
+
+            };
+
+            ourRequest.onerror = function () {
+                console.log("Connection error");
+            };
+
+            ourRequest.send();
+            
+            pageCounter++;
+            if (pageCounter > 2) {
+                btn.classList.add("hide-me");
+            }
+        });
+
+        btn_cd.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    RH2(ourData);
+                } else{
+                    console.log("We have an error.");
+                }
+            };
+            ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/' + pc + '.json', true);
+            ourRequest.send();
+
+            
+        });
+        
+        function RH2(data) {
+            var htmlString = "";
+            htmlString += "<img src=" + data.image + "/>";
+            htmlString.style.zIndex = "-1";
+            cd_container.insertAdjacentHTML('beforeend', htmlString);
+        }
+
+        function renderHTML(data) {
+            var htmlString = "";
+
+            htmlString += "<p>" + "The URL: " + data.url + " , and the full name of the farmer: " + data.firstName + "  " + data.lastName + ".</p>";
+
+            console.log(htmlString);
+
+            animalContainer.insertAdjacentHTML('beforeend', htmlString);
+        }
+    </script>
+
+<script type="text/javascript" src="/django_project/servAgri/polygons.js" ></script>
+<script>
+    var myPointss;
+	var ourData = [];
+	
+	function loadImg(url) {
+
+        return new Promise((resolve, reject) => {
+            let img = new Image();
+            img.onload = () => {
+                resolve(url);
+            };
+            img.onerror = () => {
+                reject(url);
+            };
+            img.src = url;
+        });
+    }
+	
+	function drowMyPolygon(myCanvas){
+        var points = [];
+        points = myPointss[0]["points"];
+        console.log("212", points);
+
+        myCanvas.beginPath();
+        myCanvas.moveTo( points[0][0]  * 1090, points[0][1] * 600);
+        console.log("Here the path begin");
+        for(var i = 1; i < points.length; i++){
+            myCanvas.lineTo( points[i][0] * 1090 ,points[i][1] * 600);
+
+        }
+        myCanvas.fill();
+        myCanvas.closePath();
+        myCanvas.lineWidth = 2;
+        myCanvas.stroke();
+        //myCanvas.clip();
+    }
+    
+	function render1(data) { 
+        console.log("myPoints", myPoints);
+                
+        data.map(f => {
+            
+            loadImg(f.image).then(successurl => {
+                var canvas1 = document.getElementById("myCanvas");
+                var c = canvas1.getContext("2d");
+                var img= document.createElement('img');
+                img.onload = function(){
+                    console.log("google");
+                    c.drawImage(img, 0 , 0, canvas1.width, canvas1.height );
+                    
+                    drowMyPolygon(c);
+                };
+                img.src = successurl;
+                
+            }),
+                errorurl => {
+                    console.log("Error loading " + errorurl);
+                };
+        });
+        
+    }
+    
+	function getMyPoints(id, data){
+            console.log("data data data ", data);
+            
+            myRequest.open('GET', "http://127.0.0.1:8000/values/" + id + "/", true);
+            myRequest.send();
+            myRequest.onload = function () {
+                
+                if (myRequest.readyState == 4 && myRequest.status == 200) {
+                    myPoints.push(JSON.parse(myRequest.responseText));
+                    console.log("262",myPoints);
+                    for(var j = 0; j < myPoints[0]["points"].length; j++){
+                        myPointss = myPoints[0]["points"][j];
+                        console.log("live",myPoints);
+
+                    }
+/*                     for(var k = 0; k < myPoints[0]["points"].length; k++){
+                        console.log("lat " + parseInt(myPoints[0]["points"][k][0] * 1090) + "\nlon: " + parseInt(myPoints[0]["points"][k][1] * 600));
+                    }
+                     */
+                    render1(data);
+                } else {
+                    console.log("no piint registered.");
+                }
+                
+            }
+            //myRequest.send();
+        }
+        
+	var myPoints = [];
+	var myCoordinates = [];
+
+	var myRequest = new XMLHttpRequest();
+        
+    htmlString = "";
+    var canvas = document.getElementById("myCanvas");
+    var c = canvas.getContext("2d");
+    var slideContainer = document.getElementById("show");
+    var image = new Image();
+	function firstLoad(selectId){
+        console.log("googlegoogle", selectId)
+		var ourRequest = new XMLHttpRequest();
+		ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/2.json', true);
+		
+		ourRequest.onload = function () {
+            console.log("duckgo", selectId);
+			if (ourRequest.status >= 200 && ourRequest.status < 400) {
+				ourData.push(JSON.parse(ourRequest.responseText));
+				
+				
+				//console.log("Our data", ourData.image); 
+			   // console.log('duckduck',getMyPoints(5));
+			   
+				getMyPoints(selectId, ourData);
+				
+				//console.log(getMyPoints(6));
+				render1(ourData); // this method may have an error because of its argument ( render1(arg1, arg2))
+				 
+			} else {
+				console.log("We connected to the server, but it returned an error.");
+				
+			}
+			
+		}
+		ourRequest.send();
+    }
+    ourRequest = new XMLHttpRequest();
+		ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/2.json', true);
+		
+		ourRequest.onload = function () {
+			if (ourRequest.status >= 200 && ourRequest.status < 400) {
+				ourData.push(JSON.parse(ourRequest.responseText));
+				
+				
+				//console.log("Our data", ourData.image); 
+			   // console.log('duckduck',getMyPoints(5));
+			   
+				getMyPoints(1, ourData);
+				
+				//console.log(getMyPoints(6));
+				render1(data, ourData); // this method may have an error because of its argument ( render1(arg1, arg2))
+				 
+			} else {
+				console.log("We connected to the server, but it returned an error.");
+				
+			}
+			
+		}
+		ourRequest.send();
+	
+	function setPols(polVal){
+        console.log('gooooogle', polVal);
+	
+		firstLoad(polVal);
+	}
+	
+    function fillSelectOptions(optLen){
+        console.log("optLen", optLen)
+        var mySelect = document.getElementById("mypoligones");
+        var opt = "";
+        for(var x = 0; x < optLen; x++){
+            opt += "<option value=" + (x + 1) + " onclick=\"setPols(this.value)\" > Polygone " + ( x + 1 ) + "</option>";
+        }
+        mySelect.innerHTML = opt;
+        
+    }
+    
+    var file = jsonData;
+
+    var polygonsCounter = []
+    var output = file;
+    fillSelectOptions((output.features.length - 1));
+    
+    </script>  
+    
+    <script>
+    function loadPoints(val){
+
+        var dara = new XMLHttpRequest(), method = 'GET', url = 'http://127.0.0.1:8000/values/' + vals;
+        dara.open(method, url, true);
+        dara.onload = function () {
+            if (dara.readyState === 4 && dara.status === '200') {
+                    var points = JSON.parse(data.responseText);
+                    console.log("Myyyyyy data: " , points)
+                    giveData(points);
+            } else {
+                console.log("We connected to the server, but it returned an error.");
+            }
+            dara.send();
+        };
+        //fillSelectOptions();
+    }
+    var giveData = (dara) => {
+        console.log(dara)
+    }
+
+    
+
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>

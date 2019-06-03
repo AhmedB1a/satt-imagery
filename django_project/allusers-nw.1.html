@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <title>Grabing data</title>
+
+</head>
+<header>
+    <h3>Laoding data from the server: <button id="btn">Hit here</button>
+        <h4>
+            <div id="animal-info" class="lob"></div>
+        </h4>
+    </h3>
+
+
+</header>
+
+<header>
+    <h3> loading the data of captured data:
+        <button id="btn_cd">Hit here </button>
+        <h4>
+            <div id="aa"></div>
+        </h4>
+    </h3>
+
+</header>
+<header>
+    <p> the canvas</p>
+    <div id="show"></div>
+    <canvas id="myCanvas" width="1090" height="600"></canvas>
+</header>
+
+
+
+
+<style>
+    canvas {
+        border: 2px solid black;
+    }
+
+    .lob {
+        background-color: #046380;
+    }
+
+    html,
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    .hide-me {
+        visibility: hidden;
+        opacity: 0;
+        transform: scale(.75);
+    }
+
+    h1 {
+        margin-top: 0;
+        font-size: 2.4em;
+        font-weight: normal;
+        display: inline-block;
+    }
+
+    body {
+        font-family: Helvetica, sans-serif;
+        padding: 50px 10%;
+    }
+
+    button {
+        background-color: #046380;
+        color: #FFF;
+        border: none;
+        padding: 10px 15px;
+        font-size: 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        outline: none;
+        box-shadow: 2px 2px 0 #034154;
+        margin-bottom: 10px;
+        margin-left: 18px;
+        transition: opacity .4s ease-out, transform .4s ease-out, visibility .4s ease-out;
+        position: relative;
+        top: -10px;
+    }
+
+    button:hover {
+        background-color: #034F66;
+    }
+
+    button:active {
+        background-color: #034154;
+        box-shadow: none;
+        position: relative;
+        top: -8px;
+        left: 2px;
+    }
+
+    p {
+        padding: 4px 0 2px 8px;
+        line-height: 1.7;
+        border-bottom: 1px dotted #DDD;
+        list-style: none;
+        margin: 0;
+    }
+</style>
+
+
+<body>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <div>
+        <label for="issueInput">Choose of the Polygons --</label>
+        <select name="id" class="form-control" >
+            <option value="pol1">Polygone 1</option>
+            <option value="pol2">Polygone 2</option>
+            <option value="pol3">Polygone 3</option>
+            <option value="pol4">Polygone 4</option>
+            <option value="pol5">Polygone 5</option>
+        </select>
+    </div>
+
+    <script>
+        var pc = 1;
+        var cd_container = document.getElementById("aa");
+        var btn_cd = document.getElementById("btn_cd");
+
+
+        var pageCounter = 1;
+        var animalContainer = document.getElementById("animal-info");
+        var btn = document.getElementById("btn");
+
+        btn.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.open('GET', 'http://localhost:8000/farmers/' + pageCounter + '.json');
+            ourRequest.onload = function () {
+                if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    renderHTML(ourData);
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                }
+
+            };
+
+            ourRequest.onerror = function () {
+                console.log("Connection error");
+            };
+
+            ourRequest.send();
+            pageCounter++;
+            if (pageCounter > 2) {
+                btn.classList.add("hide-me");
+            }
+        });
+
+        btn_cd.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/' + pc + '.json', true);
+            ourRequest.onload = function () {
+                if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    RH2(ourData);
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                }
+
+            };
+
+            ourRequest.onerror = function () {
+                console.log("Connection error");
+            };
+
+            ourRequest.send();
+
+            pc++;
+            if (pc > 2) {
+                btn_cd.classList.add("hide-me");
+            }
+        });
+        /*     function RH2(data) {
+                var
+                cd_container.innerHtml = data.image;
+                    } */
+        function RH2(data) {
+            var htmlString = "";
+            htmlString += "<img src=" + data.image + "/>";
+            cd_container.insertAdjacentHTML('beforeend', htmlString);
+        }
+
+
+        /**     function RH2(data) {
+                var htmlString = "";
+                htmlString += " " + data.url + " ";
+        
+                /*         var img = document.createElement("img");
+                        img.setAttribute('src', 'data.image');
+                        var boe =document.getElementById("aa").appendChild(img); */
+        /*   function si() {
+               var value = 'data.image';
+               var img = new Image(1, 1);
+               img = document.createElement('img');
+               img.src = document.getElementById('aa').src = "data:image/png;base64," + data.image;
+               /* document.body.appendChild(img); */
+        /*       document.body.appendChild(img);
+               return img;
+           }
+           function showImage() {
+               var img = document.createElement('img');
+               document.body.appendChild(img)
+               img.innerHTML = "<img src='data.image'></img>";
+           }
+   
+   
+           /** "<img src=data.image ></img>" **/
+        /*   htmlString += "<br>" + "The image is here: " + si();
+   
+           cd_container.insertAdjacentHTML('beforeend', htmlString);
+       } */
+
+
+        function renderHTML(data) {
+            var htmlString = "";
+
+
+            htmlString += "<p>" + "The URL: " + data.url + " , and the full name of the farmer: " + data.firstName + "  " + data.lastName + ".</p>";
+
+            console.log(htmlString);
+
+
+
+
+            animalContainer.insertAdjacentHTML('beforeend', htmlString);
+        }
+    </script>
+
+    <script>
+
+        var myPoints = [];
+        var myCoordinates = [];
+
+        var myRequest = new XMLHttpRequest();
+        
+        function getMyPoints(id){
+            
+            myRequest.open('GET', "http://127.0.0.1:8000/values/" + id + "/", true);
+            myRequest.send();
+            myRequest.onload = function () {
+                
+                if (myRequest.readyState ==4 && myRequest.status == 200) {
+                    myPoints.push(JSON.parse(myRequest.responseText));
+                    console.log("the points is : ", myPoints);
+                    for(var j = 0; j < myPoints[0]["points"].length; j++){
+                        myCoordinates[j] = myPoints[0]["points"][j];
+                        
+                        //console.log("j = " + j + " - 0 is: " + myCoordinates[j][0]);
+                        //console.log("j = " + j + " - 1 is: " + myCoordinates[j][3]);
+                        
+                    }
+                    //console.log( myPoints[0]["points"][0]); //, (JSON.parse(myRequest.response)));
+                } else {
+                    console.log("no piint registered.");
+                }
+                console.log("modim" + myPoints);
+            }
+            //myRequest.send();
+        }
+        
+
+    var ourData = [];
+    htmlString = "";
+    var canvas = document.getElementById("myCanvas");
+    var c = canvas.getContext("2d");
+    var slideContainer = document.getElementById("show");
+    var image = new Image();
+    var ourRequest = new XMLHttpRequest();
+    ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/2.json', true);
+    
+    ourRequest.onload = function () {
+        if (ourRequest.status >= 200 && ourRequest.status < 400) {
+            ourData.push(JSON.parse(ourRequest.responseText));
+            //console.log("Our data", ourData.image); 
+            //getMyPoints(5);
+            getMyPoints(5,ourData);
+            //console.log(getMyPoints(6));
+            render1(ourData);
+        } else {
+            console.log("We connected to the server, but it returned an error.");
+            
+        }
+        
+    }
+    ourRequest.send();
+    </script>
+    <script>
+        
+    function render1( myPoints,data) {
+        console.log('the log is comming ', myPoints);
+        
+        data.map(f => {
+            loadImg(f.image).then(successurl => {
+                let htmlString = '<img  src="' + successurl + '" />';
+                canvas.insertAdjacentHTML("beforeend", htmlString);
+                var img = new Image();
+                img.src = successurl;
+                console.log("the image", img.src);
+                // console.log("fdjfnjdskfnjkdnjnfdjka nkjf", getMyPoints(1));
+                //if(myCoord/inates.length > 2){
+                    
+                    c.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    c.beginPath();
+                
+                    //let hPoint = 1090;
+                    //let wPoint = 600;
+                    c.moveTo((myPoints[0][0] * 1090), (myPoints[0][1] * 600));
+                    //console.log("moved to: " + (myCoordinates[0][0] * 1090) + " and " + (myCoordinates[0][1] * 600));
+                    for(var iPoint = 1; iPoint < myPoints.length; iPoint++){
+                        c.lineTo(myPoints[iPoint][0] * 1090, myPoints[iPoint][1] * 600);
+                        //console.log("lined to: " + (myCoordinates[iPoint][0] * 1090) + " and " + (myCoordinates[iPoint][1] * 600));
+                        console.log(myPoints);
+                        console.log('this is :', myPoints[0][0]);
+                    }
+                    /*for(var j = 0; j < myCoordinates.length; j++){
+
+                        console.log("j = " + j + " - 0 is: " + myCoordinates[j][0]);
+                        console.log("j = " + j + " - 1 is: " + myCoordinates[j][1]);
+                    }*/
+                
+                    
+                /*c.moveTo(0.8303233387005521 * 1090, 0.15273631840765725 * 600);
+                c.lineTo( 0.8681839940815538 * 1090, 0.4248756218907236 * 600);
+                c.lineTo( 0.8070412115409736 * 1090, 0.496641791044931 * 600);
+                c.lineTo(0.7366290961312514 * 1090, 0.5657960199001554 * 600);
+                c.lineTo( 0.6831454806562509 * 1090, 0.6242537313429378 * 600);
+                c.lineTo(0.632098872883938 * 1090, 0.304601990049576 * 600);*/
+
+                c.closePath();
+                    c.lineWidth = 2;
+
+                    c.stroke();
+                //}
+                //console.log(c);
+            }),
+                errorurl => {
+                    console.log("Error loading " + errorurl);
+                };
+        });
+        
+    }
+    function loadImg(url) {
+        return new Promise((resolve, reject) => {
+            let img = new Image();
+            img.onload = () => {
+                resolve(url);
+            };
+            img.onerror = () => {
+                reject(url);
+            };
+            img.src = url;
+        });
+    }
+    var vals = 1;
+    function loadPoints(){
+        
+        var data = new XMLHttpRequest(), method = 'GET', url = 'http://127.0.0.1:8000/values/' + vals;
+        data.open(method, url, true);
+        data.onload = function () {
+            if (data.readyState === 4 && data.status === '200') {
+                    var points = JSON.parse(data.responseText);
+                    console.log("Myyyyyy data: " , points)
+                    giveData(points);
+            } else {
+                console.log("We connected to the server, but it returned an error.");
+            }
+            data.send();
+        };
+        
+    }
+    var giveData = (data) => {
+        console.log(data)
+    }
+    loadPoints();
+
+/*     function drawPolygon(){
+                c.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    c.beginPath();
+                    for (let i = 0; i < array.length; i++) {
+                        const point = array[i];
+                        
+                    } */
+/*                     c.moveTo(0.8303233387005521 * 1090, 0.15273631840765725 * 600);
+                    c.lineTo( 0.8681839940815538 * 1090, 0.4248756218907236 * 600);
+                    c.lineTo( 0.8070412115409736 * 1090, 0.496641791044931 * 600);
+                    c.lineTo(0.7366290961312514 * 1090, 0.5657960199001554 * 600);
+                    c.lineTo( 0.6831454806562509 * 1090, 0.6242537313429378 * 600);
+                    c.lineTo(0.632098872883938 * 1090, 0.304601990049576 * 600) */
+/*                     c.closePath();
+                    c.lineWidth = 2;
+
+                    c.stroke();
+                    console.log(c);
+            } */
+
+            
+
+    </script>
+<!--     <script>
+        var vals = 1; 
+        var data = new XMLHttpRequest(), methode = "GET", url = "";
+    </script> -->
+</body>
+
+</html>

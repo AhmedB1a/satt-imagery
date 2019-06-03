@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    
+    <title>Grabing data</title>
+
+
+
+	<style>
+		canvas {
+			border: 2px solid black;
+		}
+
+		.lob {
+			background-color: #046380;
+		}
+
+		html,
+		body {
+			padding: 0;
+			margin: 0;
+		}
+
+		.hide-me {
+			visibility: hidden;
+			opacity: 0;
+			transform: scale(.75);
+		}
+
+		h1 {
+			margin-top: 0;
+			font-size: 2.4em;
+			font-weight: normal;
+			display: inline-block;
+		}
+
+		body {
+			font-family: Helvetica, sans-serif;
+			padding: 50px 10%;
+		}
+
+		button {
+			background-color: #046380;
+			color: #FFF;
+			border: none;
+			padding: 10px 15px;
+			font-size: 15px;
+			border-radius: 4px;
+			cursor: pointer;
+			outline: none;
+			box-shadow: 2px 2px 0 #034154;
+			margin-bottom: 10px;
+			margin-left: 18px;
+			transition: opacity .4s ease-out, transform .4s ease-out, visibility .4s ease-out;
+			position: relative;
+			top: -10px;
+		}
+
+		button:hover {
+			background-color: #034F66;
+		}
+
+		button:active {
+			background-color: #034154;
+			box-shadow: none;
+			position: relative;
+			top: -8px;
+			left: 2px;
+		}
+
+		p {
+			padding: 4px 0 2px 8px;
+			line-height: 1.7;
+			border-bottom: 1px dotted #DDD;
+			list-style: none;
+			margin: 0;
+		}
+	</style>
+
+</head>
+
+
+<body>
+	<header>
+		<h3> Laoding data from the server: 
+		<button id="btn"> Hit here </button>
+		<h4><div id="animal-info" class="lob"></div></h4>
+		</h3>
+
+	</header>
+
+	<header>
+		<h3> loading the data of captured data: 
+		<button id="btn_cd"> Hit here </button>
+		<h4> <div id="aa"></div> </h4>
+	</h3>
+
+	</header>
+
+	<header>
+		<p> the canvas </p>
+		<canvas id="myCanvas" width="1090" height="600"></canvas>
+	</header>
+
+
+	<div>
+		<label for="issueInput"> Choose one of the Polygons -- </label>
+		<select id="mypoligones" name="id" class="form-control" >
+		<!-- option value="pol1" onclick="set">Polygone 1</option -->
+
+		</select>
+	</div>
+
+    <script>
+        var pc = 2;
+        var cd_container = document.getElementById("aa");
+        var btn_cd = document.getElementById("btn_cd");
+
+        var pageCounter = 1 ;
+        var animalContainer = document.getElementById("animal-info");
+        var btn = document.getElementById("btn");
+
+        btn.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.open('GET', 'http://localhost:8000/farmers/' + pageCounter + '.json');
+            ourRequest.onload = function () {
+                if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    renderHTML(ourData);
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                }
+
+            };
+
+            ourRequest.onerror = function () {
+                console.log("Connection error");
+            };
+
+            ourRequest.send();
+            pageCounter++;
+            if (pageCounter > 2) {
+                btn.classList.add("hide-me");
+            }
+        });
+
+        btn_cd.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    RH2(ourData);
+                } else{
+                    console.log("We have an error.");
+                }
+            };
+            ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/' + pc + '.json', true);
+            ourRequest.send();
+
+            
+        });
+
+        function RH2(data) {
+            var htmlString = "";
+            htmlString += "<img src=" + data.image + "/>";
+            htmlString.style.zIndex = "-1";
+            cd_container.insertAdjacentHTML('beforeend', htmlString);
+        }
+
+        function renderHTML(data) {
+            var htmlString = "";
+
+            htmlString += "<p>" + "The URL: " + data.url + " , and the full name of the farmer: " + data.firstName + "  " + data.lastName + ".</p>";
+
+            console.log(htmlString);
+
+            animalContainer.insertAdjacentHTML('beforeend', htmlString);
+        }
+    </script>
+
+<script>
+        var myPoints = [];
+        
+        var myRequest = new XMLHttpRequest();
+        
+        var ourData = [];
+		var canvas = document.getElementById("myCanvas");
+		var c = canvas.getContext("2d");
+
+		
+
+    function render1(data, myPoints, polNumber) { // myPoints its not important here ?? why?
+        data.map(f => {
+            loadImg(f.image).then(successurl => {
+                //console.log("its show me nothing: ", this.myPoints);
+                var canvas1 = document.getElementById("myCanvas");
+                var c = canvas1.getContext("2d");
+                var img= document.createElement('img');
+				
+                img.onload = function(){
+                    console.log("google");
+                    c.drawImage(img, 0 , 0, canvas1.width, canvas1.height );
+                    //console.log("Prob polygon any thing are: ",myPoints );
+                    drowMyPolygon(c, myPoints, polNumber);
+                };
+                img.src = successurl;
+                
+            }),
+                errorurl => {
+                    console.log("Error loading " + errorurl);
+                };
+        });
+        
+    }
+
+    function loadImg(url) {
+
+        return new Promise((resolve, reject) => {
+            let img = new Image();
+            img.onload = () => {
+                resolve(url);
+            };
+            img.onerror = () => {
+                reject(url);
+            };
+            img.src = url;
+        });
+    }
+    
+    
+    var giveData = (dara) => {
+        console.log(dara)
+    }
+    
+    function fillSelectOptions(){
+        //alert("inside selected");
+        var mySelect = document.getElementById("mypoligones");
+        var polLength = this.myPoints[0]["points"].length;
+        var opt = "";
+        //if (myPoints[0] && myPoints[0].points.length){
+		//if(window.myPoints[0]["points"].length > 0){
+		if(this.myPoints[0]["points"].length > 0){
+			for(var x = 0; x < polLength; x++){
+				opt += "<option value=\"" + (x + 1) + "\" onclick=\"setPols(this.value)\" > Polygone " + ( x + 1 ) + "</option>";
+			}
+		} else {
+			opt += "<option value=\"1\" onclick=\"setPols(this.value)\" > Polygone 1 </option>";
+		}
+        mySelect.innerHTML = opt;
+        
+    }
+
+    function setPols(optionValue){
+		render1(getMyData(2), getMyPoints(optionValue), optionValue); // optionValue === Maybe the problem is here === when I conosole log myPoints.length its give a 0.
+    }
+    
+    function drowMyPolygon(myCanvas, thisPoints, myPolygon){
+        var points = [];
+        alert("hello " + thisPoints[0]["points"].length);
+        points = thisPoints[0]["points"][myPolygon];
+        
+        myCanvas.beginPath();
+        
+        myCanvas.moveTo( points[0][0]  * 1090, points[0][1] * 600);
+        console.log("here path bigin");
+        for(var i = 1; i < points.length; i++){
+            myCanvas.lineTo( points[i][0] * 1090 ,points[i][1] * 600);
+
+        }
+
+        myCanvas.closePath();
+        myCanvas.lineWidth = 2;
+        myCanvas.stroke();
+    }
+     
+    </script>
+    <script>
+
+        function getMyPoints(id){
+            
+            myRequest.open('GET', "http://127.0.0.1:8000/values/" + id + "/", true);
+            myRequest.send();
+            myRequest.onload = function () {
+                
+                if (myRequest.readyState == 4 && myRequest.status == 200) {
+                    myPoints.push(JSON.parse(myRequest.responseText));
+                    console.log(myPoints.length);
+                    // we do not call render1?
+                } else {
+                    console.log("no piint registered.");
+                }
+            }
+        }
+
+		function getMyData(capteData){
+			myRequest.open('GET', 'http://127.0.0.1:8000/captedata/' + capteData + '.json', true);
+			myRequest.onload = function () {
+				if(myRequest.readyState == 4 && myRequest.status == '200'){
+					ourData.push(JSON.parse(myRequest.responseText));
+					
+				}
+			}
+			myRequest.send();
+		}
+	
+		getMyData(2);
+		fillSelectOptions();
+		
+    </script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>

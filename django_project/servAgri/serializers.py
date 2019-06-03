@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Farmer, Parceagri, Donnecap, Polygon, ROIPolygone
+
 class FarmerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Farmer
@@ -9,13 +10,13 @@ class FarmerSerializer(serializers.HyperlinkedModelSerializer):
 class ParceagriSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Parceagri
-        fields = ('url', 'id_parcelle')
+        fields = ('url', 'id_parcelle', 'id_farmer', 'pointDescription')
 
 
 class DonnecapSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Donnecap
-        fields = ('url', 'id_donnecap', 'id_farmer', 'id_parcelle',
+        fields = ('url', 'id_donnecap', 'id_parcelle',
          'data_type', 'image', 'psg_lat',
           'psg_lon', 'pid_lat','pid_lon', 'image_spectrum')
 

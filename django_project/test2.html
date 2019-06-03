@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <title>La platforme</title>
+
+<style>
+    .input-chexkbox{
+       
+        position: relative;
+    
+    }
+    canvas {
+        border: 2px solid black;
+    }
+
+    .lob {
+        background-color: #046380;
+    }
+
+    html,
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    .hide-me {
+        visibility: hidden;
+        opacity: 0;
+        transform: scale(.75);
+    }
+
+    h1 {
+        margin-top: 0;
+        font-size: 2.4em;
+        font-weight: normal;
+        display: inline-block;
+    }
+
+    body {
+        font-family: Helvetica, sans-serif;
+        padding: 50px 10%;
+    }
+
+    button {
+        background-color: #046380;
+        color: #FFF;
+        border: none;
+        padding: 10px 15px;
+        font-size: 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        outline: none;
+        box-shadow: 2px 2px 0 #034154;
+        margin-bottom: 10px;
+        margin-left: 18px;
+        transition: opacity .4s ease-out, transform .4s ease-out, visibility .4s ease-out;
+        position: relative;
+        top: -10px;
+    }
+
+    button:hover {
+        background-color: #034F66;
+    }
+
+    button:active {
+        background-color: #034154;
+        box-shadow: none;
+        position: relative;
+        top: -8px;
+        left: 2px;
+    }
+
+    p {
+        padding: 4px 0 2px 8px;
+        line-height: 1.7;
+        border-bottom: 1px dotted #DDD;
+        list-style: none;
+        margin: 0;
+    }
+    select {
+       padding: 3px;
+        margin: 3px;
+    }
+    .indeces{
+        margin: 5px;
+        padding: 5px;
+    }
+
+    .pl-3{
+        padding: 3px;
+        margin: 3px;
+    }
+    
+    .input-chexkbox{
+        padding: 5px;
+        margin-right: 4px;
+    }
+    .img_1{
+        width: 400px;
+        height: 300px;
+    }
+    #image_show{
+        width: 100%;
+        height: auto;
+    }
+</style>
+
+</head>
+
+<body>
+        <header>
+                <h3>Laoding data from the server: <button id="btn">Hit here</button>
+                    <h4>
+                        <div id="animal-info" class="lob"></div>
+                    </h4>
+                </h3>
+            
+        
+            </header>
+            
+            <header>
+                <h3> loading the data of captured data:
+                    <button id="btn_cd">Hit here </button>
+                    <h4>
+                        <div id="aa"></div>
+                    </h4>
+                </h3>
+            
+            </header>
+            <header>
+                <p> the canvas</p>
+                <!-- span class="pl-3"><input type="checkbox" id="check_1"/>sr
+                </span -->
+                <div class="img_1">
+                   
+                    <img id="image_show" typw="image/png" alt="img not found" src="">
+                </div>
+                <div class="indeces">
+                    <span class="pl-3"><input type="checkbox" value = "sr" class="input-chexkbox" id="sr" onclick="get_index(event, this);" title="" />SR
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "ndvi" class="input-chexkbox" id="ndvi" onclick="get_index(this)" title="" />NDVI
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "tvi" class="input-chexkbox" id="tvi" onclick="get_index(this)" title="" />TVI
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "ttvi" class="input-chexkbox" id="ttvi" onclick="get_index(this); return false;" title="" />TTVI
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "rvi" class="input-chexkbox" id="rvi" onclick="get_index(this)" title="" />RVI
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "nrvi" class="input-chexkbox" id="nrvi" onclick="get_index(this)" title="" />NRVI
+                    </span>
+                    <br>
+                    <span class="pl-3"><input type="checkbox" value = "savi" class="input-chexkbox" id="savi" onclick="get_index(this)" title="" />SAVI
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "msavi" class="input-chexkbox" id="msavi" onclick="get_index(this)" title="" />msavi
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "msavi2" class="input-chexkbox" id="msavi2" onclick="get_index(this)" title="" />msavi2
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "gemi" class="input-chexkbox" id="gemi" onclick="get_index(this)" title="" />gemi
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "ctvi" class="input-chexkbox" id="ctvi" onclick="get_index(this)" title="" />ctvi
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "dvi" class="input-chexkbox" id="dvi" onclick="get_index(this)" title="" />DVI(the first of all)
+                    </span>
+                    <span class="pl-3"><input type="checkbox" value = "gndvi" class="input-chexkbox" id="gndvi" onclick="get_index(this)" title="" />gndvi
+                    </span>
+                    
+                </div>
+                <div id="show"></div>
+                <canvas id="myCanvas" width="1090" height="600"></canvas>
+            </header>
+        
+            <script>
+/*$(document).ready(function(){
+
+    $("#check_1").click(function(){
+        console.log("show")
+        $("div.img_1").toggle();
+    });
+});*/
+        var farmer_id = 0;
+        var farm_id = 0;
+
+
+function indeces_load(){
+    var chkeks = document.querySelectorAll("input[type=checkbox]");
+    var check_title_head;
+    for(var i = 0; i < chkeks.length; i++){
+        check_title_head = " " + chkeks[i].id + " \n";
+        check_title_head += "This index: " + chkeks[i].id + ", it's used for ... ";
+        chkeks[i].title = check_title_head;
+    }
+    
+    //alert(chkeks.length);
+    
+}
+indeces_load();
+                function submitHandlrer(ev){ // Jut to remember the syntax
+                    ev.preventDefault();
+                    return false;
+                }
+
+                function get_index(event ,inputObj) {
+                    var indexes = "";
+                    var img_src = "../django_project/servAgri/output/" + inputObj.id + "-image.png";
+                    var chkbox = document.getElementsByClassName("input-chexkbox");
+                    var img_show = document.getElementById("image_show");
+
+                    //for(var i = 0; i < chkbox.length; i++){
+                    //console.log($(inputObj.val()));
+                    img_show.src = "";
+
+                    if (inputObj.checked == true) {
+                        //indexes += inputObj.id + " ";
+/*                         $.ajax({
+                            type:"GET",
+                            url: "http://localhost:8000/get-file/",
+                            data: {parm: indexes}
+                        }).done(function( o ){
+                            alert("ok checked");
+                        }); */
+                    //$.get('get-file', {'index': index}, function(){});
+
+                        
+
+                    var xhr = new XMLHttpRequest();
+                    var arrOfStrings = [];
+                    xhr.open("GET", "http://localhost:8000/indexes/"+inputObj.id, true); // that will not work. 
+                    xhr.responseType = "JSON";
+                    
+                    xhr.onload = function () {
+                        
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            arrOfStrings.push(JSON.parse(xhr.responseText));
+                            //alert(farmer_id + " " + farm_id);
+                            alert("Checked");
+                            img_show.src = img_src;
+                            //
+                        } else {
+                            console.log("We connected to the server, but it returned an error.");
+                        }
+                        //xhr.send();
+                    };
+                    xhr.send();
+                    /*img_show.src = img_src;
+                    drawPols(farmer_id, farm_id); */
+                    
+                    console.log(arrOfStrings);
+                        
+                    }
+                    event.preventDefault;
+                    return false;
+
+                    }
+                    //alert(indexes);
+                //}
+        
+            </script>
+    <div>
+        <label for="issueInput">Choose one of the Polygons --</label>
+        <select id="mypoligones" name="id" class="form-control" >
+            
+            
+        </select>
+        <!-- <input type="button" value=" Get Polygon " id="btn-get-polygon" /> -->
+        <div id="farmer-farms"></div>
+    </div>
+
+    <script>
+        var pc = 1;
+        var cd_container = document.getElementById("aa");
+        var btn_cd = document.getElementById("btn_cd");
+
+        var pageCounter = 1;
+        var animalContainer = document.getElementById("animal-info");
+        var btn = document.getElementById("btn");
+        
+        //var btn_getPolygons = document.getElementById("btn-get-polygon");
+
+        btn.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.open('GET', 'http://localhost:8000/farmers/');
+            ourRequest.onload = function () {
+                if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    alert(outData.length);
+                    renderHTML(ourData);
+                    
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                }
+
+            };
+
+            ourRequest.onerror = function () {
+                console.log("Connection error");
+            };
+
+            ourRequest.send();
+            
+            pageCounter++;
+            if (pageCounter > 2) {
+                btn.classList.add("hide-me");
+            }
+        });
+
+        btn_cd.addEventListener("click", function () {
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    var ourData = JSON.parse(ourRequest.responseText);
+                    RH2(ourData);
+                } else{
+                    console.log("We have an error.");
+                }
+            };
+            ourRequest.open('GET', 'http://127.0.0.1:8000/captedata/' + pc + '.json', true);
+            ourRequest.send();
+
+            
+        });
+        
+        /* btn_getPolygons.addEventListener("click", function() {
+            // here to save clip
+            var canvasPoly = document.getElementById("myCanvas");
+            var polyGet =  canvasPoly.getContext("2d");
+           /* canvasPoly.toBlob(function(blob) {
+                saveAs(blob, "/django_project/servAgri/polygon.png");
+                alert(blob);
+            });*/
+            //var imgDataPoly = polyGet.getPath();
+            
+        //});
+
+        function RH2(data) {
+            var htmlString = "";
+            htmlString += "<img src=" + data.image + "/>";
+            htmlString.style.zIndex = "-1";
+            cd_container.insertAdjacentHTML('beforeend', htmlString);
+        }
+
+        function renderHTML(data) {
+            var htmlString = "";
+
+            htmlString += "<p>" + "The URL: " + data.url + " , and the full name of the farmer: " + data.firstName + "  " + data.lastName + ".</p>";
+
+            console.log(htmlString);
+
+            animalContainer.insertAdjacentHTML('beforeend', htmlString);
+        }
+    </script>
+
+    <!-- script type="text/javascript" src="/django_project/servAgri/polygons.js" ></script -->
+    <script>
+
+        var ourData = [];
+        
+        function loadImg(url) {
+
+            return new Promise((resolve, reject) => {
+                let img = new Image();
+                img.onload = () => {
+                    resolve(url);
+                };
+                img.onerror = () => {
+                    reject(url);
+                };
+                img.src = url;
+            });
+        }
+        
+        function imageRender(shapPoints, farm) {
+            
+            var imgRender = [];
+            
+            let imgRequest = new XMLHttpRequest();
+            imgRequest.open("GET", "http://127.0.0.1:8000/captedata/1.json", true);
+            //imgRequest.responseType = 'arraybuffer';
+            //loadImg(imgRequest);
+            
+            imgRequest.onload = function () {
+                
+                if (imgRequest.readyState == 4 && imgRequest.status == 200) {
+                    imgRender.push(JSON.parse(imgRequest.responseText));
+                    
+                    imgRender.map(f => {
+                        let mapImage = f.image;
+                        //loadImg(f.image).then(successurl => {
+                            
+                            var can = document.getElementById("myCanvas");
+                            var canvas1 = can.getContext("2d");
+                            
+                            var img = document.createElement('img');
+                            // here convert img to tiff
+                            img.setAttribute("type", "image/png");
+                            //img.setAttribute("negative", "yse");
+
+                            //
+                            img.onload = function(){
+                               
+                                canvas1.drawImage(img, 0 , 0, can.width, can.height );
+                                // console.log(shapPoints[0].points[farm][0].length);
+                                canvas1.beginPath();
+                                canvas1.moveTo(shapPoints[0].points[farm][0][0] * 1090, shapPoints[0].points[farm][0][1] * 600);
+                                
+                                for(var i = 1; i < shapPoints[0].points[farm].length; i++){
+                                    canvas1.lineTo(shapPoints[0].points[farm][i][0] * 1090, shapPoints[0].points[farm][i][1] * 600);
+                                }
+                                canvas1.closePath();
+                                canvas1.lineWidth = 2;
+                                canvas1.strokeStyle = "#ff0000";
+                                canvas1.stroke();
+
+                                //var imgUrl = canvas.toDataURL();
+                                //console.log('the data Url', imgUrl); 
+                                //alert('reach on that ');
+                                };
+                            img.src = mapImage; //successurl;
+                        /*}),
+                            errorurl => {
+                                console.log("Error loading " + errorurl);
+                            };*/
+                    });
+                } else {
+				    console.log("We connected to the server, but it returned an error.");
+                }
+            }
+            imgRequest.send();
+        }
+            
+        var myPoints = [];
+        var myCoordinates = [];
+        var myRequest = new XMLHttpRequest();
+        htmlString = "";
+        var canvas = document.getElementById("myCanvas");
+        var c = canvas.getContext("2d");
+        var slideContainer = document.getElementById("show");
+        var image = new Image();
+
+        function firstLoad(){
+            var ourRequest = new XMLHttpRequest();
+            ourRequest.open('GET', 'http://127.0.0.1:8000/farmers', true);
+            
+            ourRequest.onload = function () {
+                if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                    ourData.push(JSON.parse(ourRequest.responseText));
+                    fillSelectOptions(ourData[0]);
+                    
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                    
+                }
+                
+            }
+            ourRequest.send();
+        }
+
+        function farmerFarms(polVal){
+            var farmerRequest = new XMLHttpRequest();
+            var farmerData = [];
+            var farmerLink = "http://127.0.0.1:8000/values/" + (parseInt(polVal) + 1) + "/";
+            farmerRequest.open('GET', farmerLink, true);
+            
+            //alert(polVal + "\n" + farmerLink);
+            
+            farmerRequest.onload = function () {
+                if (farmerRequest.readyState == 4 && farmerRequest.status == 200) {
+                    farmerData.push(JSON.parse(farmerRequest.responseText));
+                    var myFarms = document.getElementById("farmer-farms");
+                    
+                    if(farmerData[0]['points'].length > 0){
+                        fillSelectFarms(polVal, farmerData[0]['points']);
+                        //alert(polVal + " " + farmerData[0]['points'].length);
+                    } else {
+                        myFarms.innerHTML = "";
+                        alert("No farms for this farmer");
+                    }
+                    
+                    
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                    
+                }
+                
+            }
+            farmerRequest.send();
+        }
+
+        function drawPols(farmer, farm){
+            //alert(farmer + " " + farm);
+            var farmerPoints = [];
+            farmer_id = farmer;
+            farm_id = farm;
+            var newRequest = new XMLHttpRequest();
+            newRequest.open('GET', 'http://127.0.0.1:8000/farmers', true);
+            
+            newRequest.onload = function () {
+                if (newRequest.status >= 200 && newRequest.status < 400) {
+                    farmerPoints.push(JSON.parse(newRequest.responseText));
+                    console.log(farmerPoints[0][farmer].firstName);
+
+                    var farmerRequest = new XMLHttpRequest();
+
+                    let farmsData = [];
+                    var farmerLink = "http://127.0.0.1:8000/values/" + (parseInt(farmer) + 1) + "/";
+                    farmerRequest.open('GET', farmerLink, true);
+                    
+                    //alert(polVal + "\n" + farmerLink);
+                    farmerRequest.onload = function () {
+                        if (farmerRequest.readyState == 4 && farmerRequest.status == 200) {
+                            farmsData.push(JSON.parse(farmerRequest.responseText));
+                            console.log(farmsData[0].points[farm].length);
+                            if(farmsData[0].points[farm].length > 3){
+                                //alert("are you ready to put the points into the function imageRender");
+                                imageRender(farmsData, farm);
+                                //alert("now go");
+                            } else {
+                                alert("No points to draw");
+                            }
+
+                        } else {
+                            console.log("We connected to the server, but it returned an error.");
+                        }
+                    }
+                    farmerRequest.send();
+                    
+                } else {
+                    console.log("We connected to the server, but it returned an error.");
+                    
+                }
+                
+            }
+            newRequest.send();
+
+        }
+        
+        function fillSelectFarms(farmer, optLen){
+            //alert("inside selected");
+            var myFarms = document.getElementById("farmer-farms");
+            var opt = "<select class=\"form-control\">";
+            for(var x = 0; x < optLen.length; x++){
+                opt += "<option value=" + x + " onclick=\"drawPols(" + farmer + ", this.value)\" > Farm " + (x + 1) + "</option>";
+            }
+            opt += "</select>";
+            myFarms.innerHTML = opt;
+            
+        }
+        
+        function fillSelectOptions(optLen){
+            //alert("inside selected");
+            var mySelect = document.getElementById("mypoligones");
+            var opt = "";
+        
+            for(var x = 0; x < optLen.length; x++){
+                opt += "<option value=" + x + " onclick=\"farmerFarms(this.value)\" > Farmer " + optLen[x]['firstName'] + "</option>";
+            }
+            mySelect.innerHTML = opt;
+            
+        }
+        
+        // var file = jsonData;
+
+        var polygonsCounter = []
+        // var output = file;
+
+        //fillSelectOptions((output.features.length - 1));
+
+        //firstLoad(1);
+        firstLoad();
+/////   
+        
+    </script>  
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>
+

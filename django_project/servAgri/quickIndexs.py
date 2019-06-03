@@ -9,10 +9,7 @@ import matplotlib.pyplot as plt
 #from matplotlib.pyplot import cm
 from matplotlib import colors
 #from .midnormalize import MidpointNormalize
-
-
 # from matplotlib import colors
-
 
 class MidpointNormalize(colors.Normalize):
 	   
@@ -25,24 +22,33 @@ class MidpointNormalize(colors.Normalize):
 		x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
 		return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
 
-				
-
 class QuickIndex:
-
-
+	
 	# SR - Simple Ratio Vegetation Index
 	# nir/red
 	def sr(self, red, nir, kwargs):
+		np.seterr(divide='ignore', invalid='ignore')
 		sr = (self.nir.astype(float) / self.red.astype(float))
-		with rasterio.open('sr_specidx.tif', 'w', **kwargs) as dst_sr:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\sr_specidx.tif', 'w', **kwargs) as dst_sr:
 			dst_sr.write_band(1, sr.astype(rasterio.float32))
+		self.min=np.nanmin(sr)
+		self.max=np.nanmax(sr)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(20,10))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(sr, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title('SR - Simple Ratio Vegetation Index', fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\sr-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
 
 	# NDVI - Normalised Difference Vegetation Index
 	# (nir - red)/(nir + red)
 	def ndvi(self, red, nir, kwargs):
 		np.seterr(divide='ignore', invalid='ignore')
 		ndvi = (self.nir.astype(float) - self.red.astype(float)) / (self.nir + self.red)
-		with rasterio.open('D:\\careers\\python-my-projects\\django\project-code\\django_project\\server2\\django_project\\servAgri\\output\\ndvi_specidx.tif', 'w', **kwargs) as dst_ndvi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\ndvi_specidx.tif', 'w', **kwargs) as dst_ndvi:
 			dst_ndvi.write_band(1, ndvi.astype(rasterio.float32))
 		self.min=np.nanmin(ndvi)
 		self.max=np.nanmax(ndvi)
@@ -56,22 +62,41 @@ class QuickIndex:
 		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
 		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\ndvi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
 
-
-
-
 	# TVI - Transformed Vegetation Index
 	# sqrt((nir - red)/(nir + red) + 0.5)
 	def tvi(self, red, nir, kwargs):
 		tvi = np.sqrt((self.nir.astype(float) - self.red.astype(float)) / (self.nir + self.red) + 0.5)
-		with rasterio.open('tvi_specidx.tif', 'w', **kwargs) as dst_tvi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\tvi_specidx.tif', 'w', **kwargs) as dst_tvi:
 			dst_tvi.write_band(1, tvi.astype(rasterio.float32))
+		self.min=np.nanmin(tvi)
+		self.max=np.nanmax(tvi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(20,10))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(tvi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title('TVI - Transformed Vegetation Index', fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\tvi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
 				
 	# TTVI - Thiam's Transformed Vegetation Index
 	# sqrt(abs((nir - red)/(nir + red) + 0.5))
 	def ttvi(self, red, nir, kwargs):
 		ttvi = np.sqrt(np.absolute((self.nir.astype(float) - self.red.astype(float)) / (self.nir + self.red) + 0.5))
-		with rasterio.open('ttvi_specidx.tif', 'w', **kwargs) as dst_ttvi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\ttvi_specidx.tif', 'w', **kwargs) as dst_ttvi:
 			dst_ttvi.write_band(1, ttvi.astype(rasterio.float32))
+		self.min=np.nanmin(ttvi)
+		self.max=np.nanmax(ttvi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(ttvi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("TTVI - Thiam's Transformed Vegetation Index", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\ttvi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
 	
 	# NRVI - Normalised Ratio Vegetation Index
 	# (red/nir - 1)/(red/nir + 1)
@@ -79,56 +104,145 @@ class QuickIndex:
 		nrvi = (self.red.astype(float) / self.nir.astype(float) - 1) / ((self.red / self.nir) + 1) 
 		with rasterio.open('nrvi_specidx.tif', 'w', **kwargs) as dst_nrvi:
 			dst_nrvi.write_band(1, nrvi.astype(rasterio.float32))
+		self.min=np.nanmin(nrvi)
+		self.max=np.nanmax(nrvi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(nrvi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("NRVI - Normalised Ratio Vegetation Index", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\nrvi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
 
 	# RVI - Ratio Vegetation Index
 	# red / nir
 	def rvi(self, red, nir, kwargs):	
 		rvi = (self.red.astype(float) / self.nir.astype(float))
 		with rasterio.open('rvi_specidx.tif', 'w', **kwargs) as dst_rvi:
-			dst_rvi.write_band(1, rvi.astype(rasterio.float32))		
-
+			dst_rvi.write_band(1, rvi.astype(rasterio.float32))	
+		self.min=np.nanmin(rvi)
+		self.max=np.nanmax(rvi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(rvi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("RVI - Ratio Vegetation Index", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\rvi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
+			
 	# SAVI - Soil Adjusted Vegetation Index
 	# (nir - red) * (1 + L)/(nir + red + L)
 	def savi(self, red, nir, kwargs):
 		savi = (self.nir.astype(float) - self.red.astype(float) * (1 + 0.5)) / (self.nir + self.red + 0.5)
-		with rasterio.open('savi_specidx.tif', 'w', **kwargs) as dst_savi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\savi_specidx.tif', 'w', **kwargs) as dst_savi:
 			dst_savi.write_band(1, savi.astype(rasterio.float32))
-
+		self.min=np.nanmin(savi)
+		self.max=np.nanmax(savi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(savi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("SAVI - Soil Adjusted Vegetation Index", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\savi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)	
+		
 	# MSAVI - Modified Soil Adjusted Vegetation Index
 	# nir + 0.5 - (0.5 * sqrt((2 * nir + 1)^2 - 8 * (nir - (2 * red))))
 	def msavi(self, red, nir, kwargs):
 		msavi = self.nir.astype(float) + 0.5 - (0.5 * np.sqrt((2 * self.nir.astype(float) + 1)**2 - 8 * (self.nir.astype(float) - (2 * self.red.astype(float)))))
-		with rasterio.open('msavi_specidx.tif', 'w', **kwargs) as dst_msavi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\msavi_specidx.tif', 'w', **kwargs) as dst_msavi:
 			dst_msavi.write_band(1, msavi.astype(rasterio.float32))		
+		self.min=np.nanmin(msavi)
+		self.max=np.nanmax(msavi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(msavi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("MSAVI - Modified Soil Adjusted Vegetation Index", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\msavi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
 
 	# Modified Soil Adjusted Vegetation Index 2
 	# (2 * (nir + 1) - sqrt((2 * nir + 1)^2 - 8 * (nir - red)))/2
 	def msavi2(self, red, nir, kwargs):
 		msavi2 = (2 * (self.nir.astype(float) + 1) - np.sqrt((2 * self.nir.astype(float) + 1)**2 - 8 * (self.nir.astype(float) - self.red.astype(float))))/2
-		with rasterio.open('msavi2_specidx.tif', 'w', **kwargs) as dst_msavi2:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\msavi2_specidx.tif', 'w', **kwargs) as dst_msavi2:
 			dst_msavi2.write_band(1, msavi2.astype(rasterio.float32))	
+		self.min=np.nanmin(msavi2)
+		self.max=np.nanmax(msavi2)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(msavi2, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("MSAVI - Modified Soil Adjusted Vegetation Index 2", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\msavi2-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
+	
 	# Global Environmental Monitoring Index
 	# (((nir^2 - red^2) * 2 + (nir * 1.5) + (red * 0.5))/(nir + red + 0.5)) * (1 - ((((nir^2 - red^2) * 2 + (nir * 1.5) + (red * 0.5))/(nir + red + 0.5)) * 0.25)) - ((red - 0.125)/(1 - red))
 	def gemi(self, red, nir, kwargs):
 		gemi = (((self.nir.astype(float)**2 - self.red.astype(float)**2) * 2 + (self.nir * 1.5) + (self.red * 0.5))/(self.nir + self.red + 0.5)) * (1 - ((((self.nir**2 - self.red**2) * 2 + (self.nir * 1.5) + (self.red * 0.5))/(self.nir + self.red + 0.5)) * 0.25)) - ((self.red - 0.125)/(1 - self.red))
-		with rasterio.open('gemi_specidx.tif', 'w', **kwargs) as dst_gemi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\gemi_specidx.tif', 'w', **kwargs) as dst_gemi:
 			dst_gemi.write_band(1, gemi.astype(rasterio.float32))
+		self.min=np.nanmin(gemi)
+		self.max=np.nanmax(gemi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(gemi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("Global Environmental Monitoring Index", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\gemi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
 
 	# Corrected Transformed Vegetation Index
 	# (NDVI + 0.5)/sqrt(abs(NDVI + 0.5))
 	def ctvi(self, red, nir, kwargs):
 		ndvi = (self.nir.astype(float) - self.red.astype(float)) / (self.nir + self.red)
 		ctvi = (ndvi + 0.5) / np.sqrt(np.absolute(ndvi + 0.5))
-		with rasterio.open('ctvi_specidx.tif', 'w', **kwargs) as dst_ctvi:
-			dst_ctvi.write_band(1, ctvi.astype(rasterio.float32))		
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\ctvi_specidx.tif', 'w', **kwargs) as dst_ctvi:
+			dst_ctvi.write_band(1, ctvi.astype(rasterio.float32))	
+		self.min=np.nanmin(ctvi)
+		self.max=np.nanmax(ctvi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(ctvi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("Corrected Transformed Vegetation Index", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\ctvi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)	
 
 	# Difference Vegetation Index
 	# s * nir - red
 	def dvi(self, red, nir, kwargs):
 		s = self.nir.astype(float) / self.red.astype(float)
 		dvi = s * self.nir.astype(float) - self.red.astype(float)
-		with rasterio.open('dvi_specidx.tif', 'w', **kwargs) as dst_dvi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\dvi_specidx.tif', 'w', **kwargs) as dst_dvi:
 			dst_dvi.write_band(1, dvi.astype(rasterio.float32))		
+		self.min=np.nanmin(dvi)
+		self.max=np.nanmax(dvi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(dvi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("Difference Vegetation Index", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\dvi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
 	 
 	# Weighted Difference Vegetation Index
 	# nir - s * red
@@ -142,8 +256,19 @@ class QuickIndex:
 	# (nir - green)/(nir + green)
 	def gndvi(self, green, nir, kwargs):
 		gndvi = (self.nir.astype(float) - self.green.astype(float)) / (self.nir + self.green)
-		with rasterio.open('gndvi_specidx.tif', 'w', **kwargs) as dst_gndvi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\gndvi_specidx.tif', 'w', **kwargs) as dst_gndvi:
 			dst_gndvi.write_band(1, gndvi.astype(rasterio.float32))
+		self.min=np.nanmin(gndvi)
+		self.max=np.nanmax(gndvi)
+		self.mid= 0.1
+		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
+		self.fig = plt.figure(figsize=(10,5))
+		self.ax = self.fig.add_subplot(111)
+		self.cbar_plot = self.ax.imshow(gndvi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
+		self.ax.axis('off')
+		self.ax.set_title("Green Normalised Difference Vegetation Index ", fontsize=17, fontweight='bold')
+		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
+		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\gndvi-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
 
 	# Normalised Difference Water Index
 	# (green - nir)/(green + nir)
@@ -177,10 +302,13 @@ class QuickIndex:
 		slavi = self.nir.astype(float) / (self.red.astype(float) + self.swir.astype(float))
 		with rasterio.open('slavi_specidx.tif', 'w', **kwargs) as dst_slavi:
 			dst_slavi.write_band(1, slavi.astype(rasterio.float32))
+
 	def google(self, red, nir, kwargs):
 		pass
+
 	def bsi(self):
 		pass
+
 	def shadowIndex(self):
 		pass
 	
@@ -189,6 +317,7 @@ class QuickIndex:
 	
 	def ndgi(self):
 		pass
+
 	def ndmi(self):
 		pass
 
@@ -300,7 +429,6 @@ class QuickIndex:
 					else:
 						print("Error: Index [" + idx + "] doesnt exist")
 
-
 		elif green is not None and swir is not None:
 			with rasterio.open(green) as src_green:
 				self.green = src_green.read(2)
@@ -322,12 +450,11 @@ class QuickIndex:
 					else:
 						print("Error: Index [" + idx + "] doesnt exist")
 
-
 		elif red is not None and nir is not None:
 			with rasterio.open(red) as src_red:
 				self.red = src_red.read(3)
 			with rasterio.open(nir) as src_nir:
-					self.nir = src_nir.read(4)
+				self.nir = src_nir.read(4)
 			self.kwargs = src_red.meta
 			self.kwargs.update(
 				dtype=rasterio.float32,
