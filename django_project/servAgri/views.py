@@ -124,7 +124,6 @@ def all_points(request, id):
 	return  JsonResponse( context, safe=False) # render(request, page, context) # 
 
 def getIndexes(request, index):
-	
 	i = CallPython()
 	j = []
 

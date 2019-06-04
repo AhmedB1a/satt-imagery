@@ -12,18 +12,19 @@ class CallPython:
 	def get_index(request, indexid):
 		#idx = [indexid]
 		idx = [indexid]
-		#red_file = "C:\\Users\\Lenovo\\Desktop\\koko\\20160831_180302_0e26_3B_AnalyticMS.tif"
+		#red_file = "C:\\Users\\Lenovo\\Desktop\\koko\\20160831_180302_0e26_3B_AnalyticMS.tif" 
 		#nir_file = "C:\\Users\\Lenovo\\Desktop\\koko\\20160831_180302_0e26_3B_AnalyticMS.tif"
 		red_file = "D:\\careers\\python-my-projects\\issues\\projects\\dstl-satellite-waterways-master\\data\\scaled_size.tif"
 		nir_file = "D:\\careers\\python-my-projects\\issues\\projects\\dstl-satellite-waterways-master\\data\\scaled_size.tif"
 		green_file = "D:\\careers\\python-my-projects\\issues\\projects\\dstl-satellite-waterways-master\\data\\scaled_size.tif"
-		i(idx, red = red_file, nir = nir_file)
+		qi = i(idx, red = red_file, nir = nir_file)
 		""" 		output = io.BytesIO()
 		
 		response = StreamingHttpResponse(FileWrapper(\
 			open("D:\\careers\\python-my-projects\\issues\\projects\\dstl-satellite-waterways-master\\outp\\ndvi-image.png"\
 				, "rb"), 8192), content_type="image/png") """
 		#return 'response'
+		return qi
 		
 	def ndvi_img(request):
 		return HttpResponse("<img src='/ndvi/img'>")

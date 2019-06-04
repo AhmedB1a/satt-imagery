@@ -102,7 +102,7 @@ class QuickIndex:
 	# (red/nir - 1)/(red/nir + 1)
 	def nrvi(self, red, nir, kwargs):
 		nrvi = (self.red.astype(float) / self.nir.astype(float) - 1) / ((self.red / self.nir) + 1) 
-		with rasterio.open('nrvi_specidx.tif', 'w', **kwargs) as dst_nrvi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\nrvi_specidx.tif', 'w', **kwargs) as dst_nrvi:
 			dst_nrvi.write_band(1, nrvi.astype(rasterio.float32))
 		self.min=np.nanmin(nrvi)
 		self.max=np.nanmax(nrvi)
@@ -120,7 +120,7 @@ class QuickIndex:
 	# red / nir
 	def rvi(self, red, nir, kwargs):	
 		rvi = (self.red.astype(float) / self.nir.astype(float))
-		with rasterio.open('rvi_specidx.tif', 'w', **kwargs) as dst_rvi:
+		with rasterio.open('D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\rvi_specidx.tif', 'w', **kwargs) as dst_rvi:
 			dst_rvi.write_band(1, rvi.astype(rasterio.float32))	
 		self.min=np.nanmin(rvi)
 		self.max=np.nanmax(rvi)

@@ -13,6 +13,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('values/<int:id>/', views.all_points),
     path('test2/', views.getData, name='test2'),
+    #path('indexes/<str:index>', views.getIndexes, name='callPaython'),
     path('indexes/<str:index>', views.getIndexes, name='callPaython'),
     path('get-file/', views.CallFunction, name='get-file'),
 ]

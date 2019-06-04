@@ -139,16 +139,17 @@
                 </span -->
                 <div class="img_1">
                    
+                </div>
                     <img id="image_show" typw="image/png" alt="img not found" src="">
                 </div>
                 <div class="indeces">
-                    <span class="pl-3"><input type="checkbox" value = "sr" class="input-chexkbox" id="sr" onclick="get_index(event, this);" title="" />SR
+                    <span class="pl-3"><input type="checkbox" value = "sr" class="input-chexkbox" id="sr" onclick="get_index(this);" title="" />SR
                     </span>
                     <span class="pl-3"><input type="checkbox" value = "ndvi" class="input-chexkbox" id="ndvi" onclick="get_index(this)" title="" />NDVI
                     </span>
                     <span class="pl-3"><input type="checkbox" value = "tvi" class="input-chexkbox" id="tvi" onclick="get_index(this)" title="" />TVI
                     </span>
-                    <span class="pl-3"><input type="checkbox" value = "ttvi" class="input-chexkbox" id="ttvi" onclick="get_index(this); return false;" title="" />TTVI
+                    <span class="pl-3"><input type="checkbox" value = "ttvi" class="input-chexkbox" id="ttvi" onclick="get_index(this); " title="" />TTVI
                     </span>
                     <span class="pl-3"><input type="checkbox" value = "rvi" class="input-chexkbox" id="rvi" onclick="get_index(this)" title="" />RVI
                     </span>
@@ -205,9 +206,11 @@ indeces_load();
                     return false;
                 }
 
-                function get_index(event ,inputObj) {
-                    var indexes = "";
-                    var img_src = "../django_project/servAgri/output/" + inputObj.id + "-image.png";
+                function get_index(inputObj) {
+                    
+                    var indexes = inputObj.value;
+                    // D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\
+                    var img_src; // = "" + inputObj.id + "-image.png";
                     var chkbox = document.getElementsByClassName("input-chexkbox");
                     var img_show = document.getElementById("image_show");
 
@@ -215,46 +218,63 @@ indeces_load();
                     //console.log($(inputObj.val()));
                     img_show.src = "";
 
-                    if (inputObj.checked == true) {
-                        //indexes += inputObj.id + " ";
-/*                         $.ajax({
+                    //if (inputObj.checked == true) {
+                        //indexes += inputObj.id;
+/*                           $.ajax({
+                            type:"GET",
+                            url: "http://localhost:8000/indexes/",
+                            data: indexes,
+                        }).done(function(){
+                            alert("ok done");
+                        });  */
+                        //alert(indexes);
+                   $.get('http://localhost:8000/indexes/'+ indexes, function(){
+                            //e.preventDefault();
+                            console.log('the page reloaded?');
+                            alert("now its well done");
+                        }); 
+                        /*$.ajax({
                             type:"GET",
                             url: "http://localhost:8000/get-file/",
                             data: {parm: indexes}
                         }).done(function( o ){
                             alert("ok checked");
-                        }); */
-                    //$.get('get-file', {'index': index}, function(){});
-
+                        });  */
+                    //$.post('get-file', {'index': index}, function(){});
+                    
                         
 
-                    var xhr = new XMLHttpRequest();
+                    /*var xhr = new XMLHttpRequest();
                     var arrOfStrings = [];
-                    xhr.open("GET", "http://localhost:8000/indexes/"+inputObj.id, true); // that will not work. 
-                    xhr.responseType = "JSON";
+                    xhr.open("GET", "http://localhost:8000/indexes/" + inputObj.id, true); // that will not work. 
+                    //alert(xhr.responseText);
                     
                     xhr.onload = function () {
-                        
+                        alert("Checked ");
                         if (xhr.readyState == 4 && xhr.status == 200) {
+                            
                             arrOfStrings.push(JSON.parse(xhr.responseText));
-                            //alert(farmer_id + " " + farm_id);
-                            alert("Checked");
+                            alert(farmer_id + " " + farm_id);
+                            
                             img_show.src = img_src;
                             //
                         } else {
                             console.log("We connected to the server, but it returned an error.");
                         }
                         //xhr.send();
-                    };
-                    xhr.send();
+                    };*/
+
+                    //if(inputObj.id == "sd" || inputObj.id == "ttvi")
+                        //return false;
+
+                    //xhr.send();
                     /*img_show.src = img_src;
                     drawPols(farmer_id, farm_id); */
                     
-                    console.log(arrOfStrings);
+                    //console.log(arrOfStrings);
                         
-                    }
-                    event.preventDefault;
-                    return false;
+                    //}
+                    
 
                     }
                     //alert(indexes);
