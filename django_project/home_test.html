@@ -109,12 +109,15 @@
         width: 100%;
         height: auto;
     }
+    .loading{
+        display: none;
+    }
 </style>
 
 </head>
 
 <body>
-        <header>
+        <header class="loading">
             <h3>Laoding data from the server: <button id="btn">Hit here</button>
                 <h4>
                     <div id="animal-info" class="lob"></div>
@@ -124,7 +127,7 @@
     
         </header>
             
-        <header>
+        <header class="loading">
             <h3> loading the data of captured data:
                 <button id="btn_cd">Hit here </button>
                 <h4>
@@ -138,10 +141,10 @@
             <!-- span class="pl-3"><input type="checkbox" id="check_1"/>sr
             </span -->
             <div class="img_1">
-                
+              <img id="image_show" typw="image/png" alt="img not found" src="">
+  
             </div>
-            <img id="image_show" typw="image/png" alt="img not found" src="">
-
+            
             <div class="indeces">
                 <span class="pl-3"><input type="checkbox" value = "sr" class="input-chexkbox" id="sr" onclick="get_index(this);" title="" />SR
                 </span>
@@ -172,135 +175,11 @@
                 </span>
                 
             </div>
-            <div id="show"></div>
+            
             <!-- canvas id="myCanvas" width="1090" height="600"></canvas -->
-            <canvas id="myCanvas" width="1090" height="600"></canvas>
+            <canvas id="myCanvas" width="400" height="300"></canvas>
         </header>
         
-        <script>
-            /*$(document).ready(function(){
-
-                $("#check_1").click(function(){
-                    console.log("show")
-                    $("div.img_1").toggle();
-                });
-            });*/
-            var farmer_id = 0;
-            var farm_id = 0;
-            
-
-            function indeces_load(){
-                var chkeks = document.querySelectorAll("input[type=checkbox]");
-                var check_title_head;
-                for(var i = 0; i < chkeks.length; i++){
-                    check_title_head = " " + chkeks[i].id + " \n";
-                    check_title_head += "This index: " + chkeks[i].id + ", it's used for ... ";
-                    chkeks[i].title = check_title_head;
-                    chkeks[i].checked = false;
-                }
-            }
-            indeces_load();
-
-           /* function submitHandlrer(ev){ // Jut to remember the syntax
-                ev.preventDefault();
-                return false;
-            }*/
-
-            function get_index(inputObj) {   
-                var indexes = inputObj.value;
-                // D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\
-                var img_src; // = "" + inputObj.id + "-image.png";
-                var chkbox = document.getElementsByClassName("input-chexkbox");
-                var img_show = document.getElementById("image_show");
-
-                //for(var i = 0; i < chkbox.length; i++){
-                //console.log($(inputObj.val()));
-                img_show.src = "";
-
-                if (inputObj.checked == true) {
-                    var link_i = "http://127.0.0.1:8000/indexes/" + inputObj.value;
-                    var link_t = "GET";
-                    var link_d = "";
-                    csrf_token = link_i;
-
-                    $.ajaxSetup({
-                        headers: {
-                            "X-CSRF-TOKEN": csrf_token
-                        }
-                    });
-                    
-                    $.ajax({
-                        url: link_i,
-                        type: link_t,
-
-                    }).then(function(e){
-                        e.preventDefault();
-                        alert("surprize");
-                    });
-                    //indexes += inputObj.id;
-/*                           $.ajax({
-                        type:"GET",
-                        url: "http://localhost:8000/indexes/",
-                        data: indexes,
-                    }).done(function(){
-                        alert("ok done");
-                    });  
-                    //alert(indexes);
-                /* $.get('http://localhost:8000/indexes/'+ indexes, function(e){
-                        e.preventDefault();
-                        return false;
-                        console.log('the page reloaded?');
-                        alert("now its well done");
-                    }); */
-                    /*$.ajax({
-                        type:"GET",
-                        url: "http://localhost:8000/get-file/",
-                        data: {parm: indexes}
-                    }).done(function( o ){
-                        alert("ok checked");
-                    });  */
-                //$.post('get-file', {'index': index}, function(){});
-                
-                    
-
-                /*var xhr = new XMLHttpRequest();
-                var arrOfStrings = [];
-                var link_i = "http://127.0.0.1:8000/indexes/" + inputObj.id + "/";
-                xhr.open("GET", link_i, true); // that will not work. 
-                //alert(xhr.responseText);
-                //xhr.getAllResponseHeaders();
-                xhr.onload = function () {
-                    alert("Checked ");
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        
-                        arrOfStrings.push(JSON.parse(xhr.responseText));
-                        alert(farmer_id + " " + farm_id);
-                        
-                        img_show.src = img_src;
-                        //
-                    } else {
-                        console.log("We connected to the server, but it returned an error.");
-                    }
-                    
-                };*/
-                
-                //if(inputObj.id == "sd" || inputObj.id == "ttvi")
-                    //return false;
-
-                //xhr.send();
-                /*img_show.src = img_src;
-                drawPols(farmer_id, farm_id); */
-                
-                //console.log(arrOfStrings);
-                    
-                }
-                
-
-                }
-                //alert(indexes);
-            //}
-    
-        </script>
     <div>
         <label for="issueInput">Choose one of the Polygons --</label>
         <select id="mypoligones" name="id" class="form-control" >
@@ -365,17 +244,17 @@
             
         });
         
-        /* btn_getPolygons.addEventListener("click", function() {
-            // here to save clip
+        /*btn_getPolygons.addEventListener("click", function() {
+            //here to save clip
             var canvasPoly = document.getElementById("myCanvas");
             var polyGet =  canvasPoly.getContext("2d");
-           /* canvasPoly.toBlob(function(blob) {
+           canvasPoly.toBlob(function(blob) {
                 saveAs(blob, "/django_project/servAgri/polygon.png");
                 alert(blob);
-            });*/
-            //var imgDataPoly = polyGet.getPath();
+            });
+            var imgDataPoly = polyGet.getPath();
             
-        //});
+        });*/
 
         function RH2(data) {
             var htmlString = "";
@@ -617,6 +496,79 @@
         
     </script>  
 
+<script>
+            
+        /*$(document).ready(function(){
+
+            $("#check_1").click(function(){
+                console.log("show")
+                $("div.img_1").toggle();
+            });
+        });*/
+        var farmer_id = 0;
+        var farm_id = 0;
+        
+
+        function indeces_load(){
+            var chkeks = document.querySelectorAll("input[type=checkbox]");
+            var check_title_head;
+            for(var i = 0; i < chkeks.length; i++){
+                check_title_head = " " + chkeks[i].id + " \n";
+                check_title_head += "This index: " + chkeks[i].id + ", it's used for ... ";
+                chkeks[i].title = check_title_head;
+                chkeks[i].checked = false;
+            }   
+        }
+
+       /* function submitHandlrer(ev){ // Jut to remember the syntax
+            ev.preventDefault();
+            return false;
+        }*/
+
+        function get_index(inputObj) {
+            indeces_load();
+            var indexes = inputObj.value;
+            // D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\
+            var img_src; // = "" + inputObj.id + "-image.png";
+            var img_show = document.getElementById("image_show");
+            inputObj.checked = true;
+            img_show.src = "";
+
+            //if (inputObj.checked == true) {
+            var link_i = "http://127.0.0.1:8000/indexes/" + inputObj.value;
+            var link_t = "POST";
+            var link_d = "";
+            
+            var xhr = new XMLHttpRequest();
+            var arrOfStrings = [];
+            
+            xhr.open("GET", link_i, true); // that will not work. 
+            //alert(xhr.responseText);
+            //xhr.getAllResponseHeaders();
+            xhr.onload = function () {
+                alert("Checked ");
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    
+                    arrOfStrings.push(JSON.parse(xhr.responseText));
+                    alert(" O K ");
+                    
+                    //img_show.src = img_src;
+                    //
+                } else {
+                    console.log("We error.");
+                }
+                
+            };
+            //xhr.send(link_i);
+                
+        }
+            
+
+            //}
+            //alert(indexes);
+        //}
+
+    </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 
