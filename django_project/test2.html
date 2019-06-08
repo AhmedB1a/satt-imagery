@@ -8,11 +8,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <title>La platforme</title>
+    <link rel="shortcut icon" href="">
 
 <style>
     .input-chexkbox{
        
         position: relative;
+        cursor: pointer;
     
     }
     canvas {
@@ -87,23 +89,40 @@
        padding: 3px;
         margin: 3px;
     }
-    .indeces{
-        margin: 5px;
+    .indeces-row{
+        margin-top: 40px;
         padding: 5px;
     }
-
+    .indeces{
+        margin-top: 5px;
+        padding: 5px;
+    }
+    .histo{
+        margin-top: 25px;
+    }
+    .selcted-farmers{
+        margin-top: 230px;
+    }
     .pl-3{
-        padding: 3px;
-        margin: 3px;
+        font-weight: normal;
     }
     
     .input-chexkbox{
         padding: 5px;
         margin-right: 4px;
     }
+    #show{
+        text-align: center;
+    }
     .img_1{
-        width: 200px;
-        height: 150px;
+        width: 400px;
+        height: 300px;
+        display:inline-block;
+    }
+    #myCanvas{
+        display:inline-block;
+        width: 100%;
+        height: auto;
     }
     #image_show{
         width: 100%;
@@ -114,6 +133,82 @@
 </head>
 
 <body>
+    <!-- this is all form -->
+    <div class="row">
+
+        <!-- this left side for indeces and farmer selection and his farms -->
+        <div class="col-4">
+            <!-- indeces selction -->
+            <div class="row indeces-row">
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "sr" class="input-chexkbox" id="sr" onclick="get_index(this);" title="" />SR</span>
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "ndvi" class="input-chexkbox" id="ndvi" onclick="get_index(this)" title="" />NDVI</span>
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "tvi" class="input-chexkbox" id="tvi" onclick="get_index(this)" title="" />TVI</span>
+                
+            </div>
+            <div class="row">
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "ttvi" class="input-chexkbox" id="ttvi" onclick="get_index(this); " title="" />TTVI</span>
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "rvi" class="input-chexkbox" id="rvi" onclick="get_index(this)" title="" />RVI</span>
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "nrvi" class="input-chexkbox" id="nrvi" onclick="get_index(this)" title="" />NRVI</span>
+                
+            </div>
+            <div class="row">
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "savi" class="input-chexkbox" id="savi" onclick="get_index(this)" title="" />SAVI</span>
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "msavi" class="input-chexkbox" id="msavi" onclick="get_index(this)" title="" />msavi</span>
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "msavi2" class="input-chexkbox" id="msavi2" onclick="get_index(this)" title="" />msavi2</span>
+                
+            </div>
+            <div class="row">
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "gemi" class="input-chexkbox" id="gemi" onclick="get_index(this)" title="" />gemi</span>
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "ctvi" class="input-chexkbox" id="ctvi" onclick="get_index(this)" title="" />ctvi</span>
+                <span class="col-4 pl-3 indeces"><input type="checkbox" value = "gndvi" class="input-chexkbox" id="gndvi" onclick="get_index(this)" title="" />gndvi</span>
+            </div>
+            <div class="row">
+                <span class="col-12 pl-3 indeces"><input type="checkbox" value = "dvi" class="input-chexkbox" id="dvi" onclick="get_index(this)" title="" />DVI(the first of all)</span>
+
+            </div>
+
+            <div class="row">
+                    <div class="col-12">
+                        <button class="histo" type="button">Show the Histogram </button>
+                    </div>
+            </div>
+            <!-- farmer selction -->
+            <div class="row selcted-farmers">
+                <div class="col-12">
+                    <label for="issueInput">Choose one of the Polygons --</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <select id="mypoligones" name="id" class="form-control" ></select>
+                </div>
+                <div class="col-6">
+                        <div id="farmer-farms"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- this right side for canvas view -->
+        <div class="col-8">
+            <div class="col12">
+                    <p> the canvas</p>
+                    <canvas id="myCanvas" width="1090" height="600"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- image from indeces selected -->
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10 img_1">
+            <img id="image_show" alt="img not found" src="">
+        </div>
+        <div class="col-1"></div>
+    </div>
+     
+
+    <!--
         <header>
             <h3>Laoding data from the server: <button id="btn">Hit here</button>
                 <h4>
@@ -133,50 +228,29 @@
             </h3>
         
         </header>
-        <header>
-            <p> the canvas</p>
-            <!-- span class="pl-3"><input type="checkbox" id="check_1"/>sr
-            </span -->
-            <div class="img_1">
-                
-            </div>
-            <img id="image_show" typw="image/png" alt="img not found" src="">
+    -->
 
+    <!-- 
+        <header>
+            
+            <!- - span class="pl-3"><input type="checkbox" id="check_1"/>sr
+            </span - ->
+            
             <div class="indeces">
-                <span class="pl-3"><input type="checkbox" value = "sr" class="input-chexkbox" id="sr" onclick="get_index(this);" title="" />SR
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "ndvi" class="input-chexkbox" id="ndvi" onclick="get_index(this)" title="" />NDVI
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "tvi" class="input-chexkbox" id="tvi" onclick="get_index(this)" title="" />TVI
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "ttvi" class="input-chexkbox" id="ttvi" onclick="get_index(this); " title="" />TTVI
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "rvi" class="input-chexkbox" id="rvi" onclick="get_index(this)" title="" />RVI
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "nrvi" class="input-chexkbox" id="nrvi" onclick="get_index(this)" title="" />NRVI
-                </span>
-                <br>
-                <span class="pl-3"><input type="checkbox" value = "savi" class="input-chexkbox" id="savi" onclick="get_index(this)" title="" />SAVI
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "msavi" class="input-chexkbox" id="msavi" onclick="get_index(this)" title="" />msavi
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "msavi2" class="input-chexkbox" id="msavi2" onclick="get_index(this)" title="" />msavi2
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "gemi" class="input-chexkbox" id="gemi" onclick="get_index(this)" title="" />gemi
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "ctvi" class="input-chexkbox" id="ctvi" onclick="get_index(this)" title="" />ctvi
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "dvi" class="input-chexkbox" id="dvi" onclick="get_index(this)" title="" />DVI(the first of all)
-                </span>
-                <span class="pl-3"><input type="checkbox" value = "gndvi" class="input-chexkbox" id="gndvi" onclick="get_index(this)" title="" />gndvi
-                </span>
+                    
+            <br>
+                    
                 
             </div>
-            <div id="show"></div>
-            <!-- canvas id="myCanvas" width="1090" height="600"></canvas -->
-            <canvas id="myCanvas" width="1090" height="600"></canvas>
+            <div id="show">
+            <!- - canvas id="myCanvas" width="1090" height="600"></canvas - ->
+            
+            
+        </div>
         </header>
         
+    -->
+
         <script>
             /*$(document).ready(function(){
 
@@ -185,6 +259,7 @@
                     $("div.img_1").toggle();
                 });
             });*/
+
             var farmer_id = 0;
             var farm_id = 0;
             
@@ -199,25 +274,29 @@
                     chkeks[i].checked = false;
                 }
             }
-            indeces_load();
+            
 
            /* function submitHandlrer(ev){ // Jut to remember the syntax
                 ev.preventDefault();
                 return false;
             }*/
 
-            function get_index(inputObj) {   
+            function get_index(inputObj) { 
+                indeces_load();  
+                inputObj.checked = true;
                 var indexes = inputObj.value;
                 // D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\
-                var img_src; // = "" + inputObj.id + "-image.png";
+                var img_src = "http://192.168.1.4:8081/servAgri/output/"; // = "" + inputObj.id + "-image.png";
                 var chkbox = document.getElementsByClassName("input-chexkbox");
                 var img_show = document.getElementById("image_show");
 
                 //for(var i = 0; i < chkbox.length; i++){
                 //console.log($(inputObj.val()));
-                img_show.src = "";
-
+                //img_show.src = img_src + inputObj.value + "-image.png";
+                
                 if (inputObj.checked == true) {
+
+                /*    
                     var link_i = "http://127.0.0.1:8000/indexes/" + inputObj.value;
                     var link_t = "GET";
                     var link_d = "";
@@ -237,53 +316,60 @@
                         e.preventDefault();
                         alert("surprize");
                     });
+                */
+
                     //indexes += inputObj.id;
-/*                           $.ajax({
+/*                      $.ajax({
                         type:"GET",
                         url: "http://localhost:8000/indexes/",
                         data: indexes,
                     }).done(function(){
                         alert("ok done");
-                    });  
-                    //alert(indexes);
-                /* $.get('http://localhost:8000/indexes/'+ indexes, function(e){
+                    });   */
+                    //alert(indexes);*/
+
+                    $.get('http://localhost:8000/indexes/' + indexes, function(e){
                         e.preventDefault();
-                        return false;
-                        console.log('the page reloaded?');
-                        alert("now its well done");
-                    }); */
+                        alert("Reachable?");
+                    });
+
+                    img_show.src = img_src + inputObj.value + "-image.png";
+
                     /*$.ajax({
                         type:"GET",
                         url: "http://localhost:8000/get-file/",
                         data: {parm: indexes}
-                    }).done(function( o ){
+                    }).done(function(){
                         alert("ok checked");
-                    });  */
-                //$.post('get-file', {'index': index}, function(){});
+                    });*/
+
+                //$.get('get-file', {'index': index}, function(){});
                 
                     
-
-                /*var xhr = new XMLHttpRequest();
+/* 
+                var xhr = new XMLHttpRequest();
                 var arrOfStrings = [];
                 var link_i = "http://127.0.0.1:8000/indexes/" + inputObj.id + "/";
-                xhr.open("GET", link_i, true); // that will not work. 
-                //alert(xhr.responseText);
-                //xhr.getAllResponseHeaders();
-                xhr.onload = function () {
-                    alert("Checked ");
+                xhr.open("GET", link_i, true); // that will not work.
+                img_show.src = img_src + inputObj.value + "-image.png"; */
+
+                /*xhr.onload = function () {
+                    
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         
                         arrOfStrings.push(JSON.parse(xhr.responseText));
-                        alert(farmer_id + " " + farm_id);
                         
-                        img_show.src = img_src;
                         //
                     } else {
                         console.log("We connected to the server, but it returned an error.");
                     }
                     
-                };*/
-                
+                     
+                    img_show.src = img_src + inputObj.value + "-image.png";
+                };
+                xhr.send();*/
+                //drawPols(farmer_id, farm_id) 
+
                 //if(inputObj.id == "sd" || inputObj.id == "ttvi")
                     //return false;
 
@@ -301,17 +387,10 @@
             //}
     
         </script>
-    <div>
-        <label for="issueInput">Choose one of the Polygons --</label>
-        <select id="mypoligones" name="id" class="form-control" >
-            
-            
-        </select>
-        <!-- <input type="button" value=" Get Polygon " id="btn-get-polygon" /> -->
-        <div id="farmer-farms"></div>
-    </div>
+   
 
     <script>
+        /*
         var pc = 1;
         var cd_container = document.getElementById("aa");
         var btn_cd = document.getElementById("btn_cd");
@@ -364,7 +443,7 @@
 
             
         });
-        
+        */
         /* btn_getPolygons.addEventListener("click", function() {
             // here to save clip
             var canvasPoly = document.getElementById("myCanvas");
@@ -376,7 +455,7 @@
             //var imgDataPoly = polyGet.getPath();
             
         //});
-
+/*
         function RH2(data) {
             var htmlString = "";
             htmlString += "<img src=" + data.image + "/>";
@@ -392,7 +471,7 @@
             console.log(htmlString);
 
             animalContainer.insertAdjacentHTML('beforeend', htmlString);
-        }
+        }*/
     </script>
 
     <!-- script type="text/javascript" src="/django_project/servAgri/polygons.js" ></script -->

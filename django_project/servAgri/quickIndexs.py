@@ -42,7 +42,8 @@ class QuickIndex:
 		self.ax.set_title('SR - Simple Ratio Vegetation Index', fontsize=17, fontweight='bold')
 		self.cbar = self.fig.colorbar(self.cbar_plot, orientation='horizontal', shrink=0.65)
 		self.fig.savefig("D:\\careers\\python-my-projects\\django\\project-code\\django_project\\server2\\django_project\\servAgri\\output\\sr-image.png", dpi=200, bbox_inches='tight', pad_inches=0.7)
-
+		print ('saved as sd')
+		
 	# NDVI - Normalised Difference Vegetation Index
 	# (nir - red)/(nir + red)
 	def ndvi(self, red, nir, kwargs):
@@ -55,7 +56,7 @@ class QuickIndex:
 		self.mid= 0.1
 		self.norm = MidpointNormalize(vmin=self.min, vmax=self.max, midpoint=self.mid, clip=False)
 		self.fig = plt.figure(figsize=(20,10))
-		self.ax = self.fig.add_subplot(111)
+		self.ax = self.fig.add_subplot(111) # Alternative from for add_subplot(111), is add_subplot(1,1,1)
 		self.cbar_plot = self.ax.imshow(ndvi, cmap= plt.cm.RdYlGn, vmin=self.min, vmax=self.max, norm=self.norm)
 		self.ax.axis('off')
 		self.ax.set_title('Normalized Difference Vegetation Index', fontsize=17, fontweight='bold')

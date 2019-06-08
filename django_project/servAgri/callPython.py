@@ -22,7 +22,7 @@ class CallPython:
 		
 		response = StreamingHttpResponse(FileWrapper(\
 			open("D:\\careers\\python-my-projects\\issues\\projects\\dstl-satellite-waterways-master\\outp\\ndvi-image.png"\
-				, "rb"), 8192), content_type="image/png") """
+				, "rb"), 8192), content_type="image/png")  """
 		#return 'response'
 		return qi
 		
