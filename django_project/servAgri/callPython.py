@@ -2,6 +2,7 @@ from .quickIndexs import QuickIndex as i
 from django.http import HttpResponse, StreamingHttpResponse
 import io
 from wsgiref.util import FileWrapper
+from .histo_calc import get_ix as histo
 
 class CallPython:
 	def __init__(self, *args, **kwargs ):
@@ -24,6 +25,10 @@ class CallPython:
 			open("D:\\careers\\python-my-projects\\issues\\projects\\dstl-satellite-waterways-master\\outp\\ndvi-image.png"\
 				, "rb"), 8192), content_type="image/png")  """
 		#return 'response'
+		#import time
+		#time.sleep(20)
+		histo(indexid)
+
 		return qi
 		
 	def ndvi_img(request):

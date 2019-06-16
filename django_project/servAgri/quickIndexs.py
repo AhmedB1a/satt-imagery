@@ -517,7 +517,7 @@ class QuickIndex:
 					else:
 						print("Error: Index [" + idx + "] cant be created")
 		else:
-			print("------------- [ Welcome to QuickIndex ] -------------")
+			print("------------- [ Indeces ] -------------")
 
 # UNIX
 # green_file ='

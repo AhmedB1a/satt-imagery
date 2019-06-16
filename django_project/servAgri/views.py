@@ -131,7 +131,7 @@ def getIndexes(request, index):
 	context = {
 		'indexes': j
 	}
-	return  JsonResponse( context, safe=False) #  j # render(request, page, context) # 
+	return # JsonResponse( context, safe=False) #  j # render(request, page, context) # 
 
 def getData(request):
 	return render(request, 'test2.html', {'title': ' t e s t 2 ',} )
